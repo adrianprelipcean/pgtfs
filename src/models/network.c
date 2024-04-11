@@ -8,13 +8,22 @@
 #include <executor/spi.h>
 #include <utils/builtins.h>
 #include <catalog/pg_type.h>
-#include <utils/array.h> 
+#include <utils/array.h>
 #include <utils/typcache.h>
-#include <utils/lsyscache.h> 
+#include <utils/lsyscache.h>
 
 NetworkRow *create_network(const char *network_query_str, int64_t *network_size)
 {
     int ret = SPI_connect();
+    int num_rows;
+    NetworkRow *network_rows;
+    int prev_stop_sequence = -1;
+    text *trip_id_text;
+    text *stop_id_text;
+    double arrival_time;
+    double departure_time;
+    int stop_sequence;
+
     if (ret != SPI_OK_CONNECT)
     {
         elog(ERROR, "Failed to connect to SPI: %d", ret);
@@ -30,7 +39,7 @@ NetworkRow *create_network(const char *network_query_str, int64_t *network_size)
         return NULL;
     }
 
-    int num_rows = SPI_processed;
+    num_rows = SPI_processed;
     if (num_rows <= 0)
     {
         elog(INFO, "No data found in network query result.");
@@ -39,15 +48,13 @@ NetworkRow *create_network(const char *network_query_str, int64_t *network_size)
     }
 
     // Allocate memory for the array of NetworkRow structs
-    NetworkRow *network_rows = (NetworkRow *)SPI_palloc(num_rows * sizeof(NetworkRow));
+    network_rows = (NetworkRow *)SPI_palloc(num_rows * sizeof(NetworkRow));
     if (network_rows == NULL)
     {
         elog(ERROR, "Failed to allocate memory for network_rows.");
         SPI_finish();
         return NULL;
     }
-
-    int prev_stop_sequence = -1;
 
     // Retrieve data from SPI results
     for (int i = 0; i < num_rows; i++)
@@ -56,11 +63,11 @@ NetworkRow *create_network(const char *network_query_str, int64_t *network_size)
         TupleDesc tupdesc = SPI_tuptable->tupdesc;
         memset(network_rows[i].nulls, false, sizeof(network_rows[i].nulls));
 
-        text *trip_id_text = DatumGetTextP(SPI_getbinval(tuple, tupdesc, 1, &network_rows[i].nulls[0]));
-        text *stop_id_text = DatumGetTextP(SPI_getbinval(tuple, tupdesc, 2, &network_rows[i].nulls[1]));
-        double arrival_time = DatumGetFloat8(SPI_getbinval(tuple, tupdesc, 3, &network_rows[i].nulls[2]));
-        double departure_time = DatumGetFloat8(SPI_getbinval(tuple, tupdesc, 4, &network_rows[i].nulls[3]));
-        int stop_sequence = DatumGetInt32(SPI_getbinval(tuple, tupdesc, 5, &network_rows[i].nulls[4]));
+        trip_id_text = DatumGetTextP(SPI_getbinval(tuple, tupdesc, 1, &network_rows[i].nulls[0]));
+        stop_id_text = DatumGetTextP(SPI_getbinval(tuple, tupdesc, 2, &network_rows[i].nulls[1]));
+        arrival_time = DatumGetFloat8(SPI_getbinval(tuple, tupdesc, 3, &network_rows[i].nulls[2]));
+        departure_time = DatumGetFloat8(SPI_getbinval(tuple, tupdesc, 4, &network_rows[i].nulls[3]));
+        stop_sequence = DatumGetInt32(SPI_getbinval(tuple, tupdesc, 5, &network_rows[i].nulls[4]));
         // Copy trip_id directly
         strncpy(network_rows[i].trip_id, text_to_cstring(trip_id_text), MAX_STRING_LENGTH - 1);
         network_rows[i].trip_id[MAX_STRING_LENGTH - 1] = '\0'; // Ensure null-terminated
