@@ -11,13 +11,7 @@ jobs:
       matrix:
         pg:
           - 16
-          - 15
-          - 14
-          - 13
-          - 12
-          - 11
-          - 10
-
+          
     name: PostgreSQL ${{ matrix.pg }}
     runs-on: ubuntu-latest
     container: pgxn/pgxn-tools
