@@ -1,3 +1,9 @@
+<!--
+SPDX-FileCopyrightText: © 2024 Adrian C. Prelipcean
+
+SPDX-License-Identifier: CC0-1.0
+-->
+
 # PGTFS
 
 PGTFS is a PostgreSQL extension designed to facilitate routing on top of the GTFS (General Transit Feed Specification) format. It provides functionality to query and analyze public transportation data stored in a PostgreSQL database using GTFS feeds.
