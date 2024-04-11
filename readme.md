@@ -90,7 +90,7 @@ SELECT *, to_timestamp(arrival_time) FROM pgtfs_csa('10017', '55770', EXTRACT(EP
 There are a couple drawbacks for the CSA implementation, in particular: 
 - routing is performed exclusively on trips, so information such as footpaths is not considered 
 - the SQL query that retrieves the information from `stop_times` **needs to be ordered**
-- CSA is an earliest arrival time algorith, which means it does not prioritize same trip routes  
+- CSA is an earliest arrival time algorithm, which means it does not prioritize same trip routes  
 - it is still a work in progress, and not production ready
 
 ## License 
