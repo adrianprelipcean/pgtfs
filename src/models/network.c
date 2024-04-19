@@ -148,7 +148,7 @@ NetworkRow *create_network(const char *network_query_str, int64_t *network_size)
         {
             // Within the same trip
 
-            if (stop_sequence == prev_stop_sequence + 1)
+            if (stop_sequence >= prev_stop_sequence + 1)
             {
                 // This is the next stop in sequence
                 strncpy(network_rows[i - 1].to_stop_id, text_to_cstring(stop_id_text), MAX_STRING_LENGTH - 1);
