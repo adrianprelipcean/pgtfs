@@ -4,3 +4,4 @@
 
 sqlfluff
 reuse
+sphinx

@@ -42,3 +42,5 @@ results/
 
 
 .venv/
+
+docs/_build/
