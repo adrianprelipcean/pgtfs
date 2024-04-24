@@ -1,6 +1,6 @@
-# SPDX-FileCopyrightText: © 2024 Adrian C. Prelipcean
+# SPDX-FileCopyrightText: 2024 Adrian C. Prelipcean <adrianprelipceanc@gmail.com>
 #
-# SPDX-License-Identifier: CC0-1.0
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 EXTENSION = pgtfs
 DATA = pgtfs--0.0.1.sql
