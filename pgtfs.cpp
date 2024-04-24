@@ -2,6 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+/**
+ * @file pgtfs.cpp
+ * @brief Implementation of PostgreSQL extension functions.
+ */
+
 extern "C"
 {
 #include <postgres.h>
@@ -19,6 +24,15 @@ extern "C"
     static const char *EXTENSION_VERSION = "0.0.1";
 
     PG_FUNCTION_INFO_V1(pgtfs_csa);
+    /**
+     * @brief Implements the pgtfs_csa PostgreSQL extension function.
+     * 
+     * This function performs the Connection Scan Algorithm (CSA) to find connections
+     * between the specified origin and destination at the given departure time.
+     * 
+     * @param fcinfo Function call information.
+     * @return A set of rows representing the solutions found.
+     */
     Datum pgtfs_csa(PG_FUNCTION_ARGS)
     {
         FuncCallContext *funcctx;
@@ -117,6 +131,15 @@ extern "C"
     }
 
     PG_FUNCTION_INFO_V1(pgtfs_version);
+    /**
+     * @brief Returns version information about the extension.
+     * 
+     * This function returns a textual representation of version information
+     * including the extension version, PostgreSQL version, and compiler version.
+     * 
+     * @param fcinfo Function call information.
+     * @return A text representation of the version information.
+     */
     Datum pgtfs_version(PG_FUNCTION_ARGS)
     {
         const char *COMPILER_VERSION = __VERSION__;
