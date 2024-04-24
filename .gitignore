@@ -42,5 +42,7 @@ results/
 
 
 .venv/
+.env
 
 docs/_build/
+docs/doxygen/

@@ -1,0 +1,7 @@
+INPUT = pgtfs.cpp src/
+FILE_PATTERNS = pgtfs.cpp *.h
+OUTPUT_DIRECTORY = /docs/doxygen
+HAVE_DOT = YES
+GENERATE_HTML = YES
+GENERATE_XML = YES
+RECURSIVE = YES

@@ -18,7 +18,11 @@ Welcome to PGTFS's documentation!
    :maxdepth: 2
    :caption: Contents:
 
-
+.. toctree::
+   src/doxygen
+   :caption: Developer Notes
+   :maxdepth: 2
+   
 
 Indices and tables
 ==================
