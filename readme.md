@@ -1,7 +1,7 @@
 <!--
-SPDX-FileCopyrightText: © 2024 Adrian C. Prelipcean
+SPDX-FileCopyrightText: 2024 Adrian C. Prelipcean <adrianprelipceanc@gmail.com>
 
-SPDX-License-Identifier: CC0-1.0
+SPDX-License-Identifier: CC-BY-NC-SA-4.0
 -->
 
 # PGTFS
@@ -17,6 +17,8 @@ PGTFS is a PostgreSQL extension designed to facilitate routing on top of the GTF
 > Note: This is still a work in progress, and is not ready for production at this stage.
 
 ## Installation
+
+### On your local environment
 
 1. Clone the PGTFS repository:
 
@@ -42,6 +44,31 @@ PGTFS is a PostgreSQL extension designed to facilitate routing on top of the GTF
     ```sql
     CREATE EXTENSION pgtfs;
     ```
+
+### Using Docker
+
+1. Build the Docker container
+
+    ```sh
+    docker build -t gtfs/db:1.0 . 
+    ```
+
+2. Run the image 
+
+    ```sh
+    docker run --name gtfs-container -d -p 15432:5432 --env-file=.env -v `pwd`/docs:/docs gtfs/db:1.0
+    ```
+
+3. Enable the extension 
+    ```sh
+    psql --host localhost --port 15432 --user postgres -c "CREATE EXTENSION pgtfs;"
+    ```
+
+4. Verify that the extension is enabled 
+    ```sh
+    psql --host localhost --port 15432 --user postgres -c "SELECT * FROM pgtfs_version();"
+    ```
+
 
 ## Usage
 
@@ -96,6 +123,13 @@ PGTFS is a PostgreSQL extension designed to facilitate routing on top of the GTF
     ```
 
     > Note: This example is for demonstrative purposes only, dealing with multi-day trips, timezones and non-gtfs routing is not in scope.
+
+## Generating the documentation
+Easiest way to generate the documentation is to use Docker
+
+```sh
+docker exec -it gtfs-container bash -c "doxygen Doxygen && sphinx-build docs/ docs/_build/ -a"
+```
 
 ## Important notes 
 
