@@ -44,9 +44,6 @@ jobs:
       - name: Sphinx build
         run: |
           doxygen Doxygen && sphinx-build docs/ docs/_build/ -a
-      - name: Extension build
-        run: |
-          make && make install
       - name: Build package to upload to GitHub releases
         run: |
           touch pgtfs.tar.gz
