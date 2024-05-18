@@ -12,17 +12,17 @@
 
 std::vector<SolutionCSA> perform_CSA(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size)
 {
-    time_t departure_epoch = (time_t)departure_time;
+    double departure_epoch = departure_time;
 
     int num_rows = network_size;
     std::vector<SolutionCSA> stops;
 
-    std::priority_queue<std::tuple<time_t, std::string, std::vector<std::tuple<std::string, std::string, time_t>>>,
-                        std::vector<std::tuple<time_t, std::string, std::vector<std::tuple<std::string, std::string, time_t>>>>,
-                        std::greater<std::tuple<time_t, std::string, std::vector<std::tuple<std::string, std::string, time_t>>>>>
+    std::priority_queue<std::tuple<double, std::string, std::vector<std::tuple<std::string, std::string, double>>>,
+                        std::vector<std::tuple<double, std::string, std::vector<std::tuple<std::string, std::string, double>>>>,
+                        std::greater<std::tuple<double, std::string, std::vector<std::tuple<std::string, std::string, double>>>>>
         pq;
 
-    std::unordered_map<std::string, time_t> shortest_times;
+    std::unordered_map<std::string, double> shortest_times;
 
     shortest_times[std::string(origin)] = departure_epoch;
     pq.push({departure_epoch, std::string(origin), {{std::string(origin), "", departure_epoch}}});
@@ -55,14 +55,14 @@ std::vector<SolutionCSA> perform_CSA(const char *origin, const char *destination
         {
             if (current_node == network[i].from_stop_id)
             {
-                if (current_time <= (time_t)network[i].departure_time)
+                if (current_time <= network[i].departure_time)
                 {
-                    time_t neighbor_arrival_time = (time_t)network[i].departure_time + (time_t)network[i].travel_time;
+                    double neighbor_arrival_time = network[i].departure_time + network[i].travel_time;
 
                     if (shortest_times.find(network[i].to_stop_id) == shortest_times.end() || neighbor_arrival_time < shortest_times[network[i].to_stop_id])
                     {
                         shortest_times[network[i].to_stop_id] = neighbor_arrival_time;
-                        std::vector<std::tuple<std::string, std::string, time_t>> new_route = route;
+                        std::vector<std::tuple<std::string, std::string, double>> new_route = route;
                         new_route.push_back(std::make_tuple(network[i].to_stop_id, network[i].trip_id, neighbor_arrival_time));
                         pq.push({neighbor_arrival_time, network[i].to_stop_id, new_route});
                     }
