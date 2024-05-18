@@ -3,11 +3,11 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 EXTENSION = pgtfs
-DATA = pgtfs--0.0.1.sql pgtfs--0.0.2.sql
+DATA = sql/pgtfs--0.0.1.sql sql/pgtfs--0.0.2.sql
 MODULE_big = pgtfs
 OBJS = pgtfs.o src/models/network.o src/csa/csa.o
 REGRESS= pgtfs_test network_edge_cases_test
-REGRESS_OPTS= --user=postgres
+REGRESS_OPTS= --inputdir=tests --outputdir=tests --user=postgres
 PG_CONFIG = pg_config 
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 

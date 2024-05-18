@@ -16,6 +16,7 @@ and this project adheres to
 ### Changed
 - use `double` instead of `float8` and `time_t` to maintain data type consistency between PostgreSQL and PGTFS
 - `csa.cpp` correctly imports `postgres.h` for calling `elog` type functionality  
+- folder structure change: tests and relevant data is in the `tests/` folder and the (mostly versioning) extension specific sql files are in the `sql/` folder
  
 ## [0.0.1](https://github.com/adrianprelipcean/pgtfs/releases/tag/v0.0.1)
 ### Added
