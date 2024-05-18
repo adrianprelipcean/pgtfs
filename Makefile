@@ -3,7 +3,7 @@
 # SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 EXTENSION = pgtfs
-DATA = pgtfs--0.0.1.sql
+DATA = pgtfs--0.0.1.sql pgtfs--0.0.2.sql
 MODULE_big = pgtfs
 OBJS = pgtfs.o src/models/network.o src/csa/csa.o
 REGRESS= pgtfs_test network_edge_cases_test
