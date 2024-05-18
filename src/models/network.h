@@ -30,9 +30,9 @@ typedef struct {
     char trip_id[MAX_STRING_LENGTH];  /**< Trip ID */
     char from_stop_id[MAX_STRING_LENGTH]; /**< From stop ID */
     char to_stop_id[MAX_STRING_LENGTH]; /**< To stop ID */
-    float8 arrival_time; /**< Arrival time as epoch*/
-    float8 departure_time; /**< Departure time as epoch*/
-    float8 travel_time; /**< Travel time */
+    double arrival_time; /**< Arrival time as epoch*/
+    double departure_time; /**< Departure time as epoch*/
+    double travel_time; /**< Travel time */
     bool nulls[6];  /**< Array of boolean flags indicating null values */
 } NetworkRow;
 

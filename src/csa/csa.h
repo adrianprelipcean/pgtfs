@@ -10,10 +10,12 @@
 #ifndef CSA_H
 #define CSA_H
 
+extern "C" {
+#include "postgres.h"
+}
 #include <vector>
 #include <ctime>
 #include <string>
-#include "postgres.h"
 #include "src/models/network.h"
 
 /**

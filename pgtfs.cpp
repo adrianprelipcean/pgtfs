@@ -21,15 +21,15 @@ extern "C"
 extern "C"
 {
     PG_MODULE_MAGIC;
-    static const char *EXTENSION_VERSION = "0.0.1";
+    static const char *EXTENSION_VERSION = "0.0.2";
 
     PG_FUNCTION_INFO_V1(pgtfs_csa);
     /**
      * @brief Implements the pgtfs_csa PostgreSQL extension function.
-     * 
+     *
      * This function performs the Connection Scan Algorithm (CSA) to find connections
      * between the specified origin and destination at the given departure time.
-     * 
+     *
      * @param fcinfo Function call information.
      * @return A set of rows representing the solutions found.
      */
@@ -112,14 +112,14 @@ extern "C"
 
             values[0] = CStringGetTextDatum(stop.stop_id.c_str());
             values[1] = Int32GetDatum(stop.stop_sequence);
-            values[2] = Float8GetDatum((float)stop.arrival_time);
+            values[2] = Float8GetDatum(stop.arrival_time);
             values[3] = CStringGetTextDatum(stop.trip_id.c_str());
 
             bool nulls[4];
-            nulls[0] = stop.stop_id.empty(); 
-            nulls[1] = false;                
-            nulls[2] = false;                
-            nulls[3] = stop.trip_id.empty(); 
+            nulls[0] = stop.stop_id.empty();
+            nulls[1] = false;
+            nulls[2] = false;
+            nulls[3] = stop.trip_id.empty();
 
             HeapTuple tuple = heap_form_tuple(funcctx->tuple_desc, values, nulls);
             SRF_RETURN_NEXT(funcctx, HeapTupleGetDatum(tuple));
@@ -133,10 +133,10 @@ extern "C"
     PG_FUNCTION_INFO_V1(pgtfs_version);
     /**
      * @brief Returns version information about the extension.
-     * 
+     *
      * This function returns a textual representation of version information
      * including the extension version, PostgreSQL version, and compiler version.
-     * 
+     *
      * @param fcinfo Function call information.
      * @return A text representation of the version information.
      */
