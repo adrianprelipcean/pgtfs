@@ -38,7 +38,8 @@ Signature
     origin TEXT,
     destination TEXT,
     departure_time DOUBLE PRECISION,
-    network TEXT
+    network TEXT,
+    minimize_transfers BOOLEAN
     )
 
    RETURNS TABLE (
@@ -52,14 +53,15 @@ Signature
 Input columns
 -------------------------------------------------------------------------------
 
-=============== ==================== ===============================
-Name            Type                 Description
-=============== ==================== ===============================
-origin          ``TEXT``             Id of the origin
-destination     ``TEXT``             Id of the destination
-departure_time  ``DOUBLE PRECISION`` Epoch for departure time
-network         `Network SQL`_       SQL query to select the GTFS network (see below for definition)
-=============== ==================== ===============================
+=================== ==================== ===============================
+Name                Type                 Description
+=================== ==================== ===============================
+origin              ``TEXT``             Id of the origin
+destination         ``TEXT``             Id of the destination
+departure_time      ``DOUBLE PRECISION`` Epoch for departure time
+network             `Network SQL`_       SQL query to select the GTFS network (see below for definition)
+minimize_transfers  ``BOOLEAN``          Boolean flack on whether to minimize number of transfers (defaults to false)
+=================== ==================== ===============================
 
 
 Result columns
