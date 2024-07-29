@@ -21,7 +21,7 @@ extern "C"
 extern "C"
 {
     PG_MODULE_MAGIC;
-    static const char *EXTENSION_VERSION = "0.0.2";
+    static const char *EXTENSION_VERSION = "0.0.3";
 
     PG_FUNCTION_INFO_V1(pgtfs_csa);
     /**
@@ -59,6 +59,7 @@ extern "C"
             text *destination = PG_GETARG_TEXT_PP(1);
             float8 departure_time = PG_GETARG_FLOAT8(2);
             text *network_query_text = PG_GETARG_TEXT_PP(3);
+            bool minimize_transfers = PG_GETARG_BOOL(4);
 
             if (departure_time < 0)
                 ereport(ERROR,
@@ -76,7 +77,12 @@ extern "C"
                 PG_RETURN_NULL();
             }
 
-            std::vector<SolutionCSA> solution = perform_CSA(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
+            std::vector<SolutionCSA> solution;
+
+            if (minimize_transfers)
+                solution = perform_CSA_Minimize_Transfers(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
+            else
+                solution = perform_CSA(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
 
             SPI_pfree(network);
             pfree(destination);
