@@ -24,6 +24,26 @@ select trip_id, stop_id, arrival_time::double precision, departure_time::double 
 $$
 );
 
+-- simple connectivity test where sequence has a gap (3 is missing)
+select
+    stop_id,
+    stop_sequence,
+    arrival_time,
+    trip_id
+from pgtfs_csa(
+    '1', '4', 1712707200.0,
+    $$
+select trip_id, stop_id, arrival_time::double precision, departure_time::double precision, stop_sequence::int from (
+    values
+     ('1753','1',NULL,1712757660,1),
+     ('1753','2',1712759880,1712759940,2),
+     ('1753','3',1712762040,1712762100,4),
+     ('1753','4',1712762100,NULL,5)
+    )
+    as data (trip_id, stop_id, arrival_time, departure_time, stop_sequence);
+$$
+);
+
 -- connected and route on single trip
 select
     stop_id,
@@ -334,4 +354,54 @@ select trip_id, stop_id, arrival_time::double precision, departure_time::double 
     )
     as data (trip_id, stop_id, arrival_time, departure_time, stop_sequence);
 $$
+);
+
+-- check that same route is prioritized when minimize_transfers is TRUE
+
+select
+    stop_id,
+    stop_sequence,
+    arrival_time,
+    trip_id
+from pgtfs_csa(
+    '1', '4', 1712707200.0,
+    $$
+select trip_id, stop_id, arrival_time::double precision, departure_time::double precision, stop_sequence::int from (
+    values
+     ('1753','1',NULL,1712757660,1),
+     ('1753','2',1712759880,1712759940,2),
+     ('1753','3',1712762040,1712762100,3),
+     ('1753','4',1712762100,NULL,4),
+     ('1754','1',NULL,1712757660,1),
+     ('1754','2',1712759880,1712759940,2),
+     ('1754','4',1712762100,NULL,4)
+    )
+    as data (trip_id, stop_id, arrival_time, departure_time, stop_sequence);
+$$,
+    TRUE
+);
+
+-- check that same route is not prioritized when minimize_transfers is FALSE
+
+select
+    stop_id,
+    stop_sequence,
+    arrival_time,
+    trip_id
+from pgtfs_csa(
+    '1', '4', 1712707200.0,
+    $$
+select trip_id, stop_id, arrival_time::double precision, departure_time::double precision, stop_sequence::int from (
+    values
+     ('1753','1',NULL,1712757660,1),
+     ('1753','2',1712759880,1712759940,2),
+     ('1753','3',1712762040,1712762100,3),
+     ('1753','4',1712762100,NULL,4),
+     ('1754','1',NULL,1712757660,1),
+     ('1754','2',1712759880,1712759940,2),
+     ('1754','4',1712762100,NULL,4)
+    )
+    as data (trip_id, stop_id, arrival_time, departure_time, stop_sequence);
+$$,
+    FALSE
 );

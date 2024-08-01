@@ -1,14 +1,14 @@
-# SPDX-FileCopyrightText: © 2024 Adrian C. Prelipcean
+# SPDX-FileCopyrightText: 2024 Adrian C. Prelipcean <adrianprelipceanc@gmail.com>
 #
-# SPDX-License-Identifier: CC0-1.0
+# SPDX-License-Identifier: CC-BY-NC-SA-4.0
 
 EXTENSION = pgtfs
-DATA = pgtfs--0.0.1.sql
+DATA = sql/pgtfs--0.0.1.sql sql/pgtfs--0.0.2.sql sql/pgtfs--0.0.3.sql
 MODULE_big = pgtfs
 OBJS = pgtfs.o src/models/network.o src/csa/csa.o src/raptor/raptor.o
-REGRESS=pgtfs_test
-REGRESS_OPTS= --user=postgres
-PG_CONFIG = /usr/lib/postgresql/12/bin/pg_config 
+REGRESS= pgtfs_test network_edge_cases_test
+REGRESS_OPTS= --inputdir=tests --outputdir=tests --user=postgres
+PG_CONFIG = pg_config 
 PGXS := $(shell $(PG_CONFIG) --pgxs)
 
 include $(PGXS)

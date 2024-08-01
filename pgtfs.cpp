@@ -2,6 +2,11 @@
 //
 // SPDX-License-Identifier: EUPL-1.2
 
+/**
+ * @file pgtfs.cpp
+ * @brief Implementation of PostgreSQL extension functions.
+ */
+
 extern "C"
 {
 #include <postgres.h>
@@ -17,9 +22,18 @@ extern "C"
 extern "C"
 {
     PG_MODULE_MAGIC;
-    static const char *EXTENSION_VERSION = "0.0.1";
+    static const char *EXTENSION_VERSION = "0.0.3";
 
     PG_FUNCTION_INFO_V1(pgtfs_csa);
+    /**
+     * @brief Implements the pgtfs_csa PostgreSQL extension function.
+     *
+     * This function performs the Connection Scan Algorithm (CSA) to find connections
+     * between the specified origin and destination at the given departure time.
+     *
+     * @param fcinfo Function call information.
+     * @return A set of rows representing the solutions found.
+     */
     Datum pgtfs_csa(PG_FUNCTION_ARGS)
     {
         FuncCallContext *funcctx;
@@ -46,6 +60,7 @@ extern "C"
             text *destination = PG_GETARG_TEXT_PP(1);
             float8 departure_time = PG_GETARG_FLOAT8(2);
             text *network_query_text = PG_GETARG_TEXT_PP(3);
+            bool minimize_transfers = PG_GETARG_BOOL(4);
 
             if (departure_time < 0)
                 ereport(ERROR,
@@ -63,7 +78,12 @@ extern "C"
                 PG_RETURN_NULL();
             }
 
-            std::vector<SolutionCSA> solution = perform_CSA(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
+            std::vector<SolutionCSA> solution;
+
+            if (minimize_transfers)
+                solution = perform_CSA_Minimize_Transfers(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
+            else
+                solution = perform_CSA(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
 
             SPI_pfree(network);
             pfree(destination);
@@ -99,14 +119,14 @@ extern "C"
 
             values[0] = CStringGetTextDatum(stop.stop_id.c_str());
             values[1] = Int32GetDatum(stop.stop_sequence);
-            values[2] = Float8GetDatum((float)stop.arrival_time);
+            values[2] = Float8GetDatum(stop.arrival_time);
             values[3] = CStringGetTextDatum(stop.trip_id.c_str());
 
             bool nulls[4];
-            nulls[0] = stop.stop_id.empty(); 
-            nulls[1] = false;                
-            nulls[2] = false;                
-            nulls[3] = stop.trip_id.empty(); 
+            nulls[0] = stop.stop_id.empty();
+            nulls[1] = false;
+            nulls[2] = false;
+            nulls[3] = stop.trip_id.empty();
 
             HeapTuple tuple = heap_form_tuple(funcctx->tuple_desc, values, nulls);
             SRF_RETURN_NEXT(funcctx, HeapTupleGetDatum(tuple));
@@ -118,6 +138,15 @@ extern "C"
     }
 
     PG_FUNCTION_INFO_V1(pgtfs_version);
+    /**
+     * @brief Returns version information about the extension.
+     *
+     * This function returns a textual representation of version information
+     * including the extension version, PostgreSQL version, and compiler version.
+     *
+     * @param fcinfo Function call information.
+     * @return A text representation of the version information.
+     */
     Datum pgtfs_version(PG_FUNCTION_ARGS)
     {
         const char *COMPILER_VERSION = __VERSION__;
