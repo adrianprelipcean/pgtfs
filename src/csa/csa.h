@@ -17,18 +17,7 @@ extern "C" {
 #include <ctime>
 #include <string>
 #include "src/models/network.h"
-
-/**
- * @struct SolutionCSA
- * @brief Structure representing a solution in the Connection Scan Algorithm.
- */
-struct SolutionCSA
-{
-    std::string stop_id; /**< Stop ID */
-    int stop_sequence; /**< Stop sequence */
-    time_t arrival_time; /**< Arrival time */
-    std::string trip_id; /**< Trip ID */
-};
+#include "src/models/solution.h"
 
 /**
  * @brief Performs the Connection Scan Algorithm.
@@ -43,7 +32,7 @@ struct SolutionCSA
  * @param network_size The size of the network.
  * @return A vector of SolutionCSA structures representing the solutions found.
  */
-std::vector<SolutionCSA> perform_CSA(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size);
+std::vector<SolutionAlg> perform_CSA(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size);
 
 /**
  * @brief Performs the Connection Scan Algorithm and minimizes transfers when creating route from solution.
@@ -63,6 +52,6 @@ std::vector<SolutionCSA> perform_CSA(const char *origin, const char *destination
  * @param network_size The size of the network.
  * @return A vector of SolutionCSA structures representing the solutions found.
  */
-std::vector<SolutionCSA> perform_CSA_Minimize_Transfers(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size);
+std::vector<SolutionAlg> perform_CSA_Minimize_Transfers(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size);
 
 #endif /* CSA_H */

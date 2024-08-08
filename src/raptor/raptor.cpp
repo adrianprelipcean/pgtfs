@@ -11,7 +11,7 @@
 
 const double INF = std::numeric_limits<double>::infinity();
 
-std::vector<SolutionRAPTOR> perform_RAPTOR(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size, int max_rounds)
+std::vector<SolutionAlg> perform_RAPTOR(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size, int max_rounds)
 {
     std::unordered_map<std::string, std::vector<NetworkRow>> departures;
     preprocess_timetable(network, network_size, departures);
@@ -94,7 +94,7 @@ std::vector<SolutionRAPTOR> perform_RAPTOR(const char *origin, const char *desti
         }
     }
 
-    std::vector<SolutionRAPTOR> route;
+    std::vector<SolutionAlg> route;
     double best_arrival_time = INF;
     int best_round = -1;
     std::unordered_map<std::string, std::tuple<double, std::string, std::string, int>> best_stops;

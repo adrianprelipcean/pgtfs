@@ -78,7 +78,7 @@ extern "C"
                 PG_RETURN_NULL();
             }
 
-            std::vector<SolutionCSA> solution;
+            std::vector<SolutionAlg> solution;
 
             if (minimize_transfers)
                 solution = perform_CSA_Minimize_Transfers(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
@@ -93,7 +93,7 @@ extern "C"
             }
 
             funcctx->max_calls = solution.size();
-            std::vector<SolutionCSA> *solution_vector = new std::vector<SolutionCSA>(solution);
+            std::vector<SolutionAlg> *solution_vector = new std::vector<SolutionAlg>(solution);
             funcctx->user_fctx = reinterpret_cast<void *>(solution_vector);
             funcctx->call_cntr = 0;
 
@@ -110,9 +110,9 @@ extern "C"
         {
             Datum values[4];
 
-            std::vector<SolutionCSA> *solution_vector = reinterpret_cast<std::vector<SolutionCSA> *>(funcctx->user_fctx);
+            std::vector<SolutionAlg> *solution_vector = reinterpret_cast<std::vector<SolutionAlg> *>(funcctx->user_fctx);
 
-            SolutionCSA stop = (*solution_vector)[call_cntr];
+            SolutionAlg stop = (*solution_vector)[call_cntr];
 
             values[0] = CStringGetTextDatum(stop.stop_id.c_str());
             values[1] = Int32GetDatum(stop.stop_sequence);
@@ -198,7 +198,7 @@ extern "C"
                 PG_RETURN_NULL();
             }
 
-            std::vector<SolutionRAPTOR> solution = perform_RAPTOR(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size, max_rounds);
+            std::vector<SolutionAlg> solution = perform_RAPTOR(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size, max_rounds);
 
             SPI_pfree(network);
 
@@ -208,7 +208,7 @@ extern "C"
             }
 
             funcctx->max_calls = solution.size();
-            std::vector<SolutionRAPTOR> *solution_vector = new std::vector<SolutionRAPTOR>(solution);
+            std::vector<SolutionAlg> *solution_vector = new std::vector<SolutionAlg>(solution);
             funcctx->user_fctx = reinterpret_cast<void *>(solution_vector);
             funcctx->call_cntr = 0;
 
@@ -225,9 +225,9 @@ extern "C"
         {
             Datum values[4];
 
-            std::vector<SolutionRAPTOR> *solution_vector = reinterpret_cast<std::vector<SolutionRAPTOR> *>(funcctx->user_fctx);
+            std::vector<SolutionAlg> *solution_vector = reinterpret_cast<std::vector<SolutionAlg> *>(funcctx->user_fctx);
 
-            SolutionRAPTOR stop = (*solution_vector)[call_cntr];
+            SolutionAlg stop = (*solution_vector)[call_cntr];
 
             values[0] = CStringGetTextDatum(stop.stop_id.c_str());
             values[1] = Int32GetDatum(stop.stop_sequence);

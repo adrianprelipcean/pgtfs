@@ -16,19 +16,7 @@ extern "C"
 #include <unordered_map>
 #include <queue>
 #include "src/models/network.h"
-
-/**
- * @struct RAPTOR
- * @brief Structure representing a solution in the RAPTOR Algorithm.
- */
-
-struct SolutionRAPTOR
-{
-    std::string stop_id; /**< Stop ID */
-    int stop_sequence;   /**< Stop sequence */
-    double arrival_time; /**< Arrival time */
-    std::string trip_id; /**< Trip ID */
-};
+#include "src/models/solution.h"
 
 /**
  * @struct RoundData
@@ -76,7 +64,7 @@ struct RoundData
  * @return A vector of SolutionRAPTOR structures representing the solutions found.
  *
  */
-std::vector<SolutionRAPTOR> perform_RAPTOR(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size, int max_rounds);
+std::vector<SolutionAlg> perform_RAPTOR(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size, int max_rounds);
 
 /**
  * @brief Preprocesses the timetable for the RAPTOR algorithm.
