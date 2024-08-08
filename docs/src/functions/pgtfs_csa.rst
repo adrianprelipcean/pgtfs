@@ -17,6 +17,13 @@
 
   * **Official** function
 
+* Version 0.0.2
+
+  * Fixed incorrect arrival times 
+
+* Version 0.0.3
+
+  * Added `minimize_transfers` boolean flag (which defaults to `false`) 
 
 Description
 -------------------------------------------------------------------------------
@@ -122,12 +129,97 @@ Which produces a result similar to
 
     stop_id | stop_sequence |      to_timestamp      | trip_id 
     --------+---------------+------------------------+---------
-    1       |             0 | 2024-01-01 11:54:40+00 | 
-    2       |             1 | 2024-01-01 12:09:36+00 | trip-1
-    3       |             2 | 2024-01-01 12:20:16+00 | trip-1
-    5       |             3 | 2024-01-01 12:50:08+00 | trip-2
-    6       |             4 | 2024-01-01 13:00:48+00 | trip-2
+    1       |             0 | 2024-01-01 11:55:00+00 | trip-1
+    2       |             1 | 2024-01-01 12:10:00+00 | trip-1
+    3       |             2 | 2024-01-01 12:20:00+00 | trip-1
+    5       |             3 | 2024-01-01 12:50:00+00 | trip-2
+    6       |             4 | 2024-01-01 13:00:00+00 | trip-2
 
+
+Minimizing transfers on route
+...............................................................................
+
+The default version of CSA does not have any mechanism that allows for minimizing the number of transfers on a route.
+
+For example, the following query 
+.. code::  
+    
+    select stop_id, stop_sequence, to_timestamp(arrival_time), trip_id from pgtfs_csa(
+        '1', -- origin
+        '4', -- destination 
+        extract (epoch from '2024-01-01 11:55:00+00'::timestamptz)::double precision, -- expected departure time
+        $bd$
+        select 
+            trip_id, 
+            stop_id, 
+            extract (epoch from arrival_time)::double precision, 
+            extract (epoch from departure_time)::double precision, 
+            stop_sequence::int 
+            from (
+                values
+                ('trip-1','1',NULL::timestamptz, '2024-01-01 12:00:00+00'::timestamptz,1),
+                ('trip-1','2','2024-01-01 12:10:00+00','2024-01-01 12:15:00+00',2),
+                ('trip-1','3','2024-01-01 12:20:00+00','2024-01-01 12:25:00+00',3),
+                ('trip-1','4','2024-01-01 12:30:00+00',NULL,4),
+                ('trip-2','1',NULL, '2024-01-01 12:00:00+00',1),
+                ('trip-2','2','2024-01-01 12:10:00+00','2024-01-01 12:15:00+00',2),
+                ('trip-2','4','2024-01-01 12:30:00+00',NULL,3)
+            )
+            as data (trip_id, stop_id, arrival_time, departure_time, stop_sequence)
+        $bd$
+    );
+
+Produces a result spanning two different trips 
+
+.. code::
+
+    stop_id | stop_sequence |      to_timestamp      | trip_id 
+    --------+---------------+------------------------+---------
+    1       |             0 | 2024-01-01 12:55:00+01 | trip-1
+    2       |             1 | 2024-01-01 13:10:00+01 | trip-1
+    4       |             2 | 2024-01-01 13:30:00+01 | trip-2
+
+In this case, we can utilize the `minimize_transfers` variable and set it to `TRUE` as in the query below
+
+.. code::  
+    
+    select stop_id, stop_sequence, to_timestamp(arrival_time), trip_id from pgtfs_csa(
+        '1', -- origin
+        '4', -- destination 
+        extract (epoch from '2024-01-01 11:55:00+00'::timestamptz)::double precision, -- expected departure time
+        $bd$
+        select 
+            trip_id, 
+            stop_id, 
+            extract (epoch from arrival_time)::double precision, 
+            extract (epoch from departure_time)::double precision, 
+            stop_sequence::int 
+            from (
+                values
+                ('trip-1','1',NULL::timestamptz, '2024-01-01 12:00:00+00'::timestamptz,1),
+                ('trip-1','2','2024-01-01 12:10:00+00','2024-01-01 12:15:00+00',2),
+                ('trip-1','3','2024-01-01 12:20:00+00','2024-01-01 12:25:00+00',3),
+                ('trip-1','4','2024-01-01 12:30:00+00',NULL,4),
+                ('trip-2','1',NULL, '2024-01-01 12:00:00+00',1),
+                ('trip-2','2','2024-01-01 12:10:00+00','2024-01-01 12:15:00+00',2),
+                ('trip-2','4','2024-01-01 12:30:00+00',NULL,3)
+            )
+            as data (trip_id, stop_id, arrival_time, departure_time, stop_sequence)
+        $bd$,
+        TRUE
+    );
+
+This produces a result spanning one trip 
+
+.. code::
+
+    stop_id | stop_sequence |      to_timestamp      | trip_id 
+    --------+---------------+------------------------+---------
+    1       |             0 | 2024-01-01 12:55:00+01 | trip-2
+    2       |             1 | 2024-01-01 13:10:00+01 | trip-2
+    4       |             2 | 2024-01-01 13:30:00+01 | trip-2
+
+Note that this is not an exhaustive solution that works on all cases, and more :doc:`advanced algorithms <../functions/pgtfs_raptor>` are better suited if minimizing transfers is essential.
 
 See also 
 ...............................................................................
