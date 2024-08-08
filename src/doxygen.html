@@ -1,0 +1,593 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Developer documentation (C/C++) &mdash; PGTFS  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="prev" title="Concepts" href="pgtfs_concepts.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            PGTFS
+          </a>
+              <div class="version">
+                0.0.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="about.html">PGTFS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="pgtfs_concepts.html">Concepts</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Notes</span></p>
+<ul class="current">
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Developer documentation (C/C++)</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv410NetworkRow"><code class="docutils literal notranslate"><span class="pre">NetworkRow</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N10NetworkRow7trip_idE"><code class="docutils literal notranslate"><span class="pre">NetworkRow::trip_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N10NetworkRow12from_stop_idE"><code class="docutils literal notranslate"><span class="pre">NetworkRow::from_stop_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N10NetworkRow10to_stop_idE"><code class="docutils literal notranslate"><span class="pre">NetworkRow::to_stop_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N10NetworkRow12arrival_timeE"><code class="docutils literal notranslate"><span class="pre">NetworkRow::arrival_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N10NetworkRow14departure_timeE"><code class="docutils literal notranslate"><span class="pre">NetworkRow::departure_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N10NetworkRow11travel_timeE"><code class="docutils literal notranslate"><span class="pre">NetworkRow::travel_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N10NetworkRow5nullsE"><code class="docutils literal notranslate"><span class="pre">NetworkRow::nulls</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv49RoundData"><code class="docutils literal notranslate"><span class="pre">RoundData</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N9RoundData5stopsE"><code class="docutils literal notranslate"><span class="pre">RoundData::stops</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N9RoundData13arrival_timesE"><code class="docutils literal notranslate"><span class="pre">RoundData::arrival_times</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv48Solution"><code class="docutils literal notranslate"><span class="pre">Solution</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv411SolutionAlg"><code class="docutils literal notranslate"><span class="pre">SolutionAlg</span></code></a><ul>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N11SolutionAlg7stop_idE"><code class="docutils literal notranslate"><span class="pre">SolutionAlg::stop_id</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N11SolutionAlg13stop_sequenceE"><code class="docutils literal notranslate"><span class="pre">SolutionAlg::stop_sequence</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N11SolutionAlg12arrival_timeE"><code class="docutils literal notranslate"><span class="pre">SolutionAlg::arrival_time</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="#_CPPv4N11SolutionAlg7trip_idE"><code class="docutils literal notranslate"><span class="pre">SolutionAlg::trip_id</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv419PG_FUNCTION_INFO_V19pgtfs_csa"><code class="docutils literal notranslate"><span class="pre">PG_FUNCTION_INFO_V1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv49pgtfs_csa16PG_FUNCTION_ARGS"><code class="docutils literal notranslate"><span class="pre">pgtfs_csa()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv419PG_FUNCTION_INFO_V113pgtfs_version"><code class="docutils literal notranslate"><span class="pre">PG_FUNCTION_INFO_V1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv413pgtfs_version16PG_FUNCTION_ARGS"><code class="docutils literal notranslate"><span class="pre">pgtfs_version()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv419PG_FUNCTION_INFO_V112pgtfs_raptor"><code class="docutils literal notranslate"><span class="pre">PG_FUNCTION_INFO_V1()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv412pgtfs_raptor16PG_FUNCTION_ARGS"><code class="docutils literal notranslate"><span class="pre">pgtfs_raptor()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv417EXTENSION_VERSION"><code class="docutils literal notranslate"><span class="pre">EXTENSION_VERSION</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv411perform_CSAPKcPKc6float8P10NetworkRow7int64_t"><code class="docutils literal notranslate"><span class="pre">perform_CSA()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv430perform_CSA_Minimize_TransfersPKcPKc6float8P10NetworkRow7int64_t"><code class="docutils literal notranslate"><span class="pre">perform_CSA_Minimize_Transfers()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv414perform_RAPTORPKcPKc6float8P10NetworkRow7int64_ti"><code class="docutils literal notranslate"><span class="pre">perform_RAPTOR()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv420preprocess_timetableP10NetworkRow7int64_tRNSt13unordered_mapINSt6stringENSt6vectorI10NetworkRowEEEE"><code class="docutils literal notranslate"><span class="pre">preprocess_timetable()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv414create_networkPKcP7int64_t"><code class="docutils literal notranslate"><span class="pre">create_network()</span></code></a></li>
+<li class="toctree-l2"><a class="reference internal" href="#_CPPv418print_network_rowsP10NetworkRow7int64_t"><code class="docutils literal notranslate"><span class="pre">print_network_rows()</span></code></a></li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">PGTFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Developer documentation (C/C++)</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/src/doxygen.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="developer-documentation-c-c">
+<h1>Developer documentation (C/C++)<a class="headerlink" href="#developer-documentation-c-c" title="Link to this heading"></a></h1>
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv410NetworkRow">
+<span id="_CPPv310NetworkRow"></span><span id="_CPPv210NetworkRow"></span><span id="NetworkRow"></span><span class="target" id="structNetworkRow"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">NetworkRow</span></span></span><a class="headerlink" href="#_CPPv410NetworkRow" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;<a class="reference internal" href="#network_8h"><span class="std std-ref">network.h</span></a>&gt;</em></div>
+<p>Structure representing a row in a network. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10NetworkRow7trip_idE">
+<span id="_CPPv3N10NetworkRow7trip_idE"></span><span id="_CPPv2N10NetworkRow7trip_idE"></span><span id="NetworkRow::trip_id__cA"></span><span class="target" id="structNetworkRow_1a5cea4a3e62c7f4226fe21993b7fbc54c"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">trip_id</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">MAX_STRING_LENGTH</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N10NetworkRow7trip_idE" title="Link to this definition"></a><br /></dt>
+<dd><p>Trip ID </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10NetworkRow12from_stop_idE">
+<span id="_CPPv3N10NetworkRow12from_stop_idE"></span><span id="_CPPv2N10NetworkRow12from_stop_idE"></span><span id="NetworkRow::from_stop_id__cA"></span><span class="target" id="structNetworkRow_1a7a93d507e5a5e7ba38502041efe0b297"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">from_stop_id</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">MAX_STRING_LENGTH</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N10NetworkRow12from_stop_idE" title="Link to this definition"></a><br /></dt>
+<dd><p>From stop ID </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10NetworkRow10to_stop_idE">
+<span id="_CPPv3N10NetworkRow10to_stop_idE"></span><span id="_CPPv2N10NetworkRow10to_stop_idE"></span><span id="NetworkRow::to_stop_id__cA"></span><span class="target" id="structNetworkRow_1a7af093c760ee6a7d72fa4f7d96f5732b"></span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">to_stop_id</span></span></span><span class="p"><span class="pre">[</span></span><span class="n"><span class="pre">MAX_STRING_LENGTH</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N10NetworkRow10to_stop_idE" title="Link to this definition"></a><br /></dt>
+<dd><p>To stop ID </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10NetworkRow12arrival_timeE">
+<span id="_CPPv3N10NetworkRow12arrival_timeE"></span><span id="_CPPv2N10NetworkRow12arrival_timeE"></span><span id="NetworkRow::arrival_time__double"></span><span class="target" id="structNetworkRow_1a4bc9e2e98dddcd338f52bb9d8152cac2"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrival_time</span></span></span><a class="headerlink" href="#_CPPv4N10NetworkRow12arrival_timeE" title="Link to this definition"></a><br /></dt>
+<dd><p>Arrival time as epoch </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10NetworkRow14departure_timeE">
+<span id="_CPPv3N10NetworkRow14departure_timeE"></span><span id="_CPPv2N10NetworkRow14departure_timeE"></span><span id="NetworkRow::departure_time__double"></span><span class="target" id="structNetworkRow_1a9c2d2d06453f3aade28fda767e04325b"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">departure_time</span></span></span><a class="headerlink" href="#_CPPv4N10NetworkRow14departure_timeE" title="Link to this definition"></a><br /></dt>
+<dd><p>Departure time as epoch </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10NetworkRow11travel_timeE">
+<span id="_CPPv3N10NetworkRow11travel_timeE"></span><span id="_CPPv2N10NetworkRow11travel_timeE"></span><span id="NetworkRow::travel_time__double"></span><span class="target" id="structNetworkRow_1a23f0b00875eeab8cb450cb869ba2f37e"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">travel_time</span></span></span><a class="headerlink" href="#_CPPv4N10NetworkRow11travel_timeE" title="Link to this definition"></a><br /></dt>
+<dd><p>Travel time </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N10NetworkRow5nullsE">
+<span id="_CPPv3N10NetworkRow5nullsE"></span><span id="_CPPv2N10NetworkRow5nullsE"></span><span id="NetworkRow::nulls__bA"></span><span class="target" id="structNetworkRow_1a6fd15315d0cd49df9883e75d511a2b39"></span><span class="kt"><span class="pre">bool</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">nulls</span></span></span><span class="p"><span class="pre">[</span></span><span class="m"><span class="pre">6</span></span><span class="p"><span class="pre">]</span></span><a class="headerlink" href="#_CPPv4N10NetworkRow5nullsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Array of boolean flags indicating null values </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv49RoundData">
+<span id="_CPPv39RoundData"></span><span id="_CPPv29RoundData"></span><span id="RoundData"></span><span class="target" id="structRoundData"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">RoundData</span></span></span><a class="headerlink" href="#_CPPv49RoundData" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;<a class="reference internal" href="#raptor_8h"><span class="std std-ref">raptor.h</span></a>&gt;</em></div>
+<p>Contains data related to stops and arrival times for a round. </p>
+<p>This struct holds information about stops and their associated data, including arrival times, previous stops, trip IDs, and the number of transfers. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9RoundData5stopsE">
+<span id="_CPPv3N9RoundData5stopsE"></span><span id="_CPPv2N9RoundData5stopsE"></span><span id="RoundData::stops__std::unordered_map:ss.std::tuple:double.ss.ss.i::"></span><span class="target" id="structRoundData_1ad72d91c4541b0a35a7db708de2339db0"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">tuple</span></span><span class="p"><span class="pre">&lt;</span></span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">int</span></span><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stops</span></span></span><a class="headerlink" href="#_CPPv4N9RoundData5stopsE" title="Link to this definition"></a><br /></dt>
+<dd><p>Maps stop identifiers to detailed stop information. </p>
+<p>This map associates each stop identifier (as a string) with a tuple containing:<ul class="simple">
+<li><p>Arrival time (double)</p></li>
+<li><p>Previous stop identifier (string)</p></li>
+<li><p>Trip ID (string)</p></li>
+<li><p>Number of transfers (int) </p></li>
+</ul>
+</p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N9RoundData13arrival_timesE">
+<span id="_CPPv3N9RoundData13arrival_timesE"></span><span id="_CPPv2N9RoundData13arrival_timesE"></span><span id="RoundData::arrival_times__std::unordered_map:ss.double:"></span><span class="target" id="structRoundData_1ac76527b4dcfb1b393e6637f27eeccde8"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="kt"><span class="pre">double</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrival_times</span></span></span><a class="headerlink" href="#_CPPv4N9RoundData13arrival_timesE" title="Link to this definition"></a><br /></dt>
+<dd><p>Maps stop identifiers to their arrival times. </p>
+<p>This map associates each stop identifier (as a string) with its corresponding arrival time (double). </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv48Solution">
+<span id="_CPPv38Solution"></span><span id="_CPPv28Solution"></span><span id="Solution"></span><span class="target" id="structSolution"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">Solution</span></span></span><a class="headerlink" href="#_CPPv48Solution" title="Link to this definition"></a><br /></dt>
+<dd><div class="docutils container">
+<em>#include &lt;<a class="reference internal" href="#solution_8h"><span class="std std-ref">solution.h</span></a>&gt;</em></div>
+<p>Structure representing a solution for the public transportation algorithms. </p>
+</dd></dl>
+
+<dl class="cpp struct">
+<dt class="sig sig-object cpp" id="_CPPv411SolutionAlg">
+<span id="_CPPv311SolutionAlg"></span><span id="_CPPv211SolutionAlg"></span><span id="SolutionAlg"></span><span class="target" id="structSolutionAlg"></span><span class="k"><span class="pre">struct</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">SolutionAlg</span></span></span><a class="headerlink" href="#_CPPv411SolutionAlg" title="Link to this definition"></a><br /></dt>
+<dd><div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-public-members">Public Members</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N11SolutionAlg7stop_idE">
+<span id="_CPPv3N11SolutionAlg7stop_idE"></span><span id="_CPPv2N11SolutionAlg7stop_idE"></span><span id="SolutionAlg::stop_id__ss"></span><span class="target" id="structSolutionAlg_1a9b2fb15ba9006238027453b0edcc3595"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stop_id</span></span></span><a class="headerlink" href="#_CPPv4N11SolutionAlg7stop_idE" title="Link to this definition"></a><br /></dt>
+<dd><p>Stop ID </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N11SolutionAlg13stop_sequenceE">
+<span id="_CPPv3N11SolutionAlg13stop_sequenceE"></span><span id="_CPPv2N11SolutionAlg13stop_sequenceE"></span><span id="SolutionAlg::stop_sequence__i"></span><span class="target" id="structSolutionAlg_1a373c3495102c23ad8ad612e0198ab607"></span><span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">stop_sequence</span></span></span><a class="headerlink" href="#_CPPv4N11SolutionAlg13stop_sequenceE" title="Link to this definition"></a><br /></dt>
+<dd><p>Stop sequence </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N11SolutionAlg12arrival_timeE">
+<span id="_CPPv3N11SolutionAlg12arrival_timeE"></span><span id="_CPPv2N11SolutionAlg12arrival_timeE"></span><span id="SolutionAlg::arrival_time__double"></span><span class="target" id="structSolutionAlg_1ab2d0352e935636141a498184276b8d95"></span><span class="kt"><span class="pre">double</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">arrival_time</span></span></span><a class="headerlink" href="#_CPPv4N11SolutionAlg12arrival_timeE" title="Link to this definition"></a><br /></dt>
+<dd><p>Arrival time </p>
+</dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv4N11SolutionAlg7trip_idE">
+<span id="_CPPv3N11SolutionAlg7trip_idE"></span><span id="_CPPv2N11SolutionAlg7trip_idE"></span><span id="SolutionAlg::trip_id__ss"></span><span class="target" id="structSolutionAlg_1a7094788fedb144cd2a0b2bdeaa32730b"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">trip_id</span></span></span><a class="headerlink" href="#_CPPv4N11SolutionAlg7trip_idE" title="Link to this definition"></a><br /></dt>
+<dd><p>Trip ID </p>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="pgtfs_8cpp"></span><em><span class="pre">file</span></em> <span class="sig-name descname"><span class="pre">pgtfs.cpp</span></span></dt>
+<dd><div class="docutils container">
+<em>#include &lt;postgres.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;fmgr.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;utils/builtins.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;funcapi.h&gt;</em></div>
+<div class="docutils container">
+<em>#include “<a class="reference internal" href="#network_8h"><span class="std std-ref">src/models/network.h</span></a>”</em></div>
+<div class="docutils container">
+<em>#include “<a class="reference internal" href="#csa_8h"><span class="std std-ref">src/algorithms/csa/csa.h</span></a>”</em></div>
+<div class="docutils container">
+<em>#include “<a class="reference internal" href="#raptor_8h"><span class="std std-ref">src/algorithms/raptor/raptor.h</span></a>”</em></div>
+<p>Implementation of PostgreSQL extension functions. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419PG_FUNCTION_INFO_V19pgtfs_csa">
+<span id="_CPPv319PG_FUNCTION_INFO_V19pgtfs_csa"></span><span id="_CPPv219PG_FUNCTION_INFO_V19pgtfs_csa"></span><span id="PG_FUNCTION_INFO_V1__pgtfs_csa"></span><span class="target" id="pgtfs_8cpp_1a4f29d9e9f007a4ff95a5df59e7ea02e9"></span><span class="sig-name descname"><span class="n"><span class="pre">PG_FUNCTION_INFO_V1</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv49pgtfs_csa16PG_FUNCTION_ARGS" title="pgtfs_csa"><span class="n"><span class="pre">pgtfs_csa</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419PG_FUNCTION_INFO_V19pgtfs_csa" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv49pgtfs_csa16PG_FUNCTION_ARGS">
+<span id="_CPPv39pgtfs_csa16PG_FUNCTION_ARGS"></span><span id="_CPPv29pgtfs_csa16PG_FUNCTION_ARGS"></span><span id="pgtfs_csa__PG_FUNCTION_ARGS"></span><span class="target" id="pgtfs_8cpp_1af26e59812507cb6d548d07b2f93f2c96"></span><span class="n"><span class="pre">Datum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pgtfs_csa</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PG_FUNCTION_ARGS</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv49pgtfs_csa16PG_FUNCTION_ARGS" title="Link to this definition"></a><br /></dt>
+<dd><p>Implements the pgtfs_csa PostgreSQL extension function. </p>
+<p>This function performs the Connection Scan Algorithm (CSA) to find connections between the specified origin and destination at the given departure time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fcinfo</strong> – Function call information. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A set of rows representing the solutions found. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419PG_FUNCTION_INFO_V113pgtfs_version">
+<span id="_CPPv319PG_FUNCTION_INFO_V113pgtfs_version"></span><span id="_CPPv219PG_FUNCTION_INFO_V113pgtfs_version"></span><span id="PG_FUNCTION_INFO_V1__pgtfs_version"></span><span class="target" id="pgtfs_8cpp_1ae3fb41116ccbabacd657d2db1719a763"></span><span class="sig-name descname"><span class="n"><span class="pre">PG_FUNCTION_INFO_V1</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv413pgtfs_version16PG_FUNCTION_ARGS" title="pgtfs_version"><span class="n"><span class="pre">pgtfs_version</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419PG_FUNCTION_INFO_V113pgtfs_version" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv413pgtfs_version16PG_FUNCTION_ARGS">
+<span id="_CPPv313pgtfs_version16PG_FUNCTION_ARGS"></span><span id="_CPPv213pgtfs_version16PG_FUNCTION_ARGS"></span><span id="pgtfs_version__PG_FUNCTION_ARGS"></span><span class="target" id="pgtfs_8cpp_1a6a5c01c6f1ab9dee384d621932f5561b"></span><span class="n"><span class="pre">Datum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pgtfs_version</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PG_FUNCTION_ARGS</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv413pgtfs_version16PG_FUNCTION_ARGS" title="Link to this definition"></a><br /></dt>
+<dd><p>Returns version information about the extension. </p>
+<p>This function returns a textual representation of version information including the extension version, PostgreSQL version, and compiler version.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><p><strong>fcinfo</strong> – Function call information. </p>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A text representation of the version information. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv419PG_FUNCTION_INFO_V112pgtfs_raptor">
+<span id="_CPPv319PG_FUNCTION_INFO_V112pgtfs_raptor"></span><span id="_CPPv219PG_FUNCTION_INFO_V112pgtfs_raptor"></span><span id="PG_FUNCTION_INFO_V1__pgtfs_raptor"></span><span class="target" id="pgtfs_8cpp_1a7c7e998a073c75df6fb26957d2670107"></span><span class="sig-name descname"><span class="n"><span class="pre">PG_FUNCTION_INFO_V1</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv412pgtfs_raptor16PG_FUNCTION_ARGS" title="pgtfs_raptor"><span class="n"><span class="pre">pgtfs_raptor</span></span></a><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv419PG_FUNCTION_INFO_V112pgtfs_raptor" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv412pgtfs_raptor16PG_FUNCTION_ARGS">
+<span id="_CPPv312pgtfs_raptor16PG_FUNCTION_ARGS"></span><span id="_CPPv212pgtfs_raptor16PG_FUNCTION_ARGS"></span><span id="pgtfs_raptor__PG_FUNCTION_ARGS"></span><span class="target" id="pgtfs_8cpp_1ad3cf13ee1fe68afef2704c1bbb245653"></span><span class="n"><span class="pre">Datum</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">pgtfs_raptor</span></span></span><span class="sig-paren">(</span><span class="n"><span class="pre">PG_FUNCTION_ARGS</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv412pgtfs_raptor16PG_FUNCTION_ARGS" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-variables">Variables</p>
+<dl class="cpp var">
+<dt class="sig sig-object cpp">
+<span class="target" id="pgtfs_8cpp_1a509119277abe280e6db17c34f79e01cf"></span><span class="sig-name descname"><span class="pre">PG_MODULE_MAGIC</span></span></dt>
+<dd></dd></dl>
+
+<dl class="cpp var">
+<dt class="sig sig-object cpp" id="_CPPv417EXTENSION_VERSION">
+<span id="_CPPv317EXTENSION_VERSION"></span><span id="_CPPv217EXTENSION_VERSION"></span><span id="EXTENSION_VERSION__cCP"></span><span class="target" id="pgtfs_8cpp_1acecd0a0fbe5c7a19b6e9f7107a43c290"></span><span class="k"><span class="pre">static</span></span><span class="w"> </span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">EXTENSION_VERSION</span></span></span><span class="w"> </span><span class="p"><span class="pre">=</span></span><span class="w"> </span><span class="s"><span class="pre">&quot;0.0.4&quot;</span></span><a class="headerlink" href="#_CPPv417EXTENSION_VERSION" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="csa_8h"></span><em><span class="pre">file</span></em> <span class="sig-name descname"><span class="pre">csa.h</span></span></dt>
+<dd><div class="docutils container">
+<em>#include “postgres.h”</em></div>
+<div class="docutils container">
+<em>#include &lt;vector&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;ctime&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;string&gt;</em></div>
+<div class="docutils container">
+<em>#include “<a class="reference internal" href="#network_8h"><span class="std std-ref">src/models/network.h</span></a>”</em></div>
+<div class="docutils container">
+<em>#include “<a class="reference internal" href="#solution_8h"><span class="std std-ref">src/models/solution.h</span></a>”</em></div>
+<p>Declarations for the CSA (Connection Scan Algorithm) module. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv411perform_CSAPKcPKc6float8P10NetworkRow7int64_t">
+<span id="_CPPv311perform_CSAPKcPKc6float8P10NetworkRow7int64_t"></span><span id="_CPPv211perform_CSAPKcPKc6float8P10NetworkRow7int64_t"></span><span id="perform_CSA__cCP.cCP.float8.NetworkRowP.int64_t"></span><span class="target" id="csa_8h_1a97f903c33c6b91eeed4fd84240f2a824"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv411SolutionAlg" title="SolutionAlg"><span class="n"><span class="pre">SolutionAlg</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">perform_CSA</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">origin</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">destination</span></span>, <span class="n"><span class="pre">float8</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">departure_time</span></span>, <a class="reference internal" href="#_CPPv410NetworkRow" title="NetworkRow"><span class="n"><span class="pre">NetworkRow</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">network</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">network_size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv411perform_CSAPKcPKc6float8P10NetworkRow7int64_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Performs the Connection Scan Algorithm. </p>
+<p>This function performs the Connection Scan Algorithm (CSA) to find connections between the specified origin and destination at the given departure time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>origin</strong> – The origin stop ID. </p></li>
+<li><p><strong>destination</strong> – The destination stop ID. </p></li>
+<li><p><strong>departure_time</strong> – The departure time. </p></li>
+<li><p><strong>network</strong> – Pointer to the network of stops. </p></li>
+<li><p><strong>network_size</strong> – The size of the network. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector of SolutionCSA structures representing the solutions found. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv430perform_CSA_Minimize_TransfersPKcPKc6float8P10NetworkRow7int64_t">
+<span id="_CPPv330perform_CSA_Minimize_TransfersPKcPKc6float8P10NetworkRow7int64_t"></span><span id="_CPPv230perform_CSA_Minimize_TransfersPKcPKc6float8P10NetworkRow7int64_t"></span><span id="perform_CSA_Minimize_Transfers__cCP.cCP.float8.NetworkRowP.int64_t"></span><span class="target" id="csa_8h_1a3439becc1d99d313e873eca7d708bcc3"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv411SolutionAlg" title="SolutionAlg"><span class="n"><span class="pre">SolutionAlg</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">perform_CSA_Minimize_Transfers</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">origin</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">destination</span></span>, <span class="n"><span class="pre">float8</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">departure_time</span></span>, <a class="reference internal" href="#_CPPv410NetworkRow" title="NetworkRow"><span class="n"><span class="pre">NetworkRow</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">network</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">network_size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv430perform_CSA_Minimize_TransfersPKcPKc6float8P10NetworkRow7int64_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Performs the Connection Scan Algorithm and minimizes transfers when creating route from solution. </p>
+<p>This function performs the Connection Scan Algorithm (CSA) to find connections between the specified origin and destination at the given departure time. It keeps an array of trip_ids that are relevant for each stop and arrival time pair that is then used to stay on the same trip_id as the previous stop when multiple trip_ids are relevant. This does not minimize number of transfers as a tradeoff with arrival time, it only ensures that the final route does not randomly change between trip_ids when maintaining the same trip_id is possible.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>origin</strong> – The origin stop ID. </p></li>
+<li><p><strong>destination</strong> – The destination stop ID. </p></li>
+<li><p><strong>departure_time</strong> – The departure time. </p></li>
+<li><p><strong>network</strong> – Pointer to the network of stops. </p></li>
+<li><p><strong>network_size</strong> – The size of the network. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector of SolutionCSA structures representing the solutions found. </p>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="raptor_8h"></span><em><span class="pre">file</span></em> <span class="sig-name descname"><span class="pre">raptor.h</span></span></dt>
+<dd><div class="docutils container">
+<em>#include “postgres.h”</em></div>
+<div class="docutils container">
+<em>#include &lt;fmgr.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;utils/builtins.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;vector&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;string&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;unordered_map&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;queue&gt;</em></div>
+<div class="docutils container">
+<em>#include “<a class="reference internal" href="#network_8h"><span class="std std-ref">src/models/network.h</span></a>”</em></div>
+<div class="docutils container">
+<em>#include “<a class="reference internal" href="#solution_8h"><span class="std std-ref">src/models/solution.h</span></a>”</em></div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414perform_RAPTORPKcPKc6float8P10NetworkRow7int64_ti">
+<span id="_CPPv314perform_RAPTORPKcPKc6float8P10NetworkRow7int64_ti"></span><span id="_CPPv214perform_RAPTORPKcPKc6float8P10NetworkRow7int64_ti"></span><span id="perform_RAPTOR__cCP.cCP.float8.NetworkRowP.int64_t.i"></span><span class="target" id="raptor_8h_1a58312000bec8ef4f236d2b8f42f0ef40"></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv411SolutionAlg" title="SolutionAlg"><span class="n"><span class="pre">SolutionAlg</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">perform_RAPTOR</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">origin</span></span>, <span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">destination</span></span>, <span class="n"><span class="pre">float8</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">departure_time</span></span>, <a class="reference internal" href="#_CPPv410NetworkRow" title="NetworkRow"><span class="n"><span class="pre">NetworkRow</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">network</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">network_size</span></span>, <span class="kt"><span class="pre">int</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">max_rounds</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414perform_RAPTORPKcPKc6float8P10NetworkRow7int64_ti" title="Link to this definition"></a><br /></dt>
+<dd><p>Performs the RAPTOR algorithm to find the best route. </p>
+<p>This function executes the RAPTOR algorithm to find connections between the specified origin and destination at the given departure time.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>origin</strong> – The origin stop ID. </p></li>
+<li><p><strong>destination</strong> – The destination stop ID. </p></li>
+<li><p><strong>departure_time</strong> – The departure time. </p></li>
+<li><p><strong>network</strong> – Pointer to the network of stops. </p></li>
+<li><p><strong>network_size</strong> – The size of the network. </p></li>
+<li><p><strong>max_rounds</strong> – The limit on the number of rounds to be performed by RAPTOR. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>A vector of SolutionRAPTOR structures representing the solutions found. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv420preprocess_timetableP10NetworkRow7int64_tRNSt13unordered_mapINSt6stringENSt6vectorI10NetworkRowEEEE">
+<span id="_CPPv320preprocess_timetableP10NetworkRow7int64_tRNSt13unordered_mapINSt6stringENSt6vectorI10NetworkRowEEEE"></span><span id="_CPPv220preprocess_timetableP10NetworkRow7int64_tRNSt13unordered_mapINSt6stringENSt6vectorI10NetworkRowEEEE"></span><span id="preprocess_timetable__NetworkRowP.int64_t.std::unordered_map:ss.std::vector:NetworkRow::R"></span><span class="target" id="raptor_8h_1a8ea66c89cadd518f2ad67cdc4be588fb"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">preprocess_timetable</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410NetworkRow" title="NetworkRow"><span class="n"><span class="pre">NetworkRow</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">network</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">network_size</span></span>, <span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">unordered_map</span></span><span class="p"><span class="pre">&lt;</span></span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">string</span></span><span class="p"><span class="pre">,</span></span><span class="w"> </span><span class="n"><span class="pre">std</span></span><span class="p"><span class="pre">::</span></span><span class="n"><span class="pre">vector</span></span><span class="p"><span class="pre">&lt;</span></span><a class="reference internal" href="#_CPPv410NetworkRow" title="NetworkRow"><span class="n"><span class="pre">NetworkRow</span></span></a><span class="p"><span class="pre">&gt;</span></span><span class="p"><span class="pre">&gt;</span></span><span class="w"> </span><span class="p"><span class="pre">&amp;</span></span><span class="n sig-param"><span class="pre">departures</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv420preprocess_timetableP10NetworkRow7int64_tRNSt13unordered_mapINSt6stringENSt6vectorI10NetworkRowEEEE" title="Link to this definition"></a><br /></dt>
+<dd><p>Preprocesses the timetable for the RAPTOR algorithm. </p>
+<p>This function preprocesses the timetable data to optimize the performance of the RAPTOR algorithm.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network</strong> – The network data. </p></li>
+<li><p><strong>network_size</strong> – The size of the network data. </p></li>
+<li><p><strong>departures</strong> – A reference to an unordered map that will hold the preprocessed departure data. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="network_8h"></span><em><span class="pre">file</span></em> <span class="sig-name descname"><span class="pre">network.h</span></span></dt>
+<dd><div class="docutils container">
+<em>#include &lt;postgres.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;fmgr.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;executor/spi.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;utils/builtins.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;catalog/pg_type.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;utils/array.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;utils/typcache.h&gt;</em></div>
+<div class="docutils container">
+<em>#include &lt;utils/lsyscache.h&gt;</em></div>
+<p>Declarations for functions related to network operations. </p>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-defines">Defines</p>
+<dl class="cpp macro">
+<dt class="sig sig-object cpp" id="c.MAX_STRING_LENGTH">
+<span class="target" id="network_8h_1a6789ebc0df71a8ef76bfbb4fb5f74aad"></span><span class="sig-name descname"><span class="n"><span class="pre">MAX_STRING_LENGTH</span></span></span><a class="headerlink" href="#c.MAX_STRING_LENGTH" title="Link to this definition"></a><br /></dt>
+<dd></dd></dl>
+
+</div>
+<div class="breathe-sectiondef docutils container">
+<p class="breathe-sectiondef-title rubric" id="breathe-section-title-functions">Functions</p>
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv414create_networkPKcP7int64_t">
+<span id="_CPPv314create_networkPKcP7int64_t"></span><span id="_CPPv214create_networkPKcP7int64_t"></span><span id="create_network__cCP.int64_tP"></span><span class="target" id="network_8h_1a1172546d4ae9519828b3ad4ea0ff5d0d"></span><a class="reference internal" href="#_CPPv410NetworkRow" title="NetworkRow"><span class="n"><span class="pre">NetworkRow</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="sig-name descname"><span class="n"><span class="pre">create_network</span></span></span><span class="sig-paren">(</span><span class="k"><span class="pre">const</span></span><span class="w"> </span><span class="kt"><span class="pre">char</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">network_query_str</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">network_size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv414create_networkPKcP7int64_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Creates a network from the given query string. </p>
+<p>This function creates a network based on the provided query string and returns a pointer to the network.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_query_str</strong> – The query string specifying the network. </p></li>
+<li><p><strong>network_size</strong> – Pointer to store the size of the network. </p></li>
+</ul>
+</dd>
+<dt class="field-even">Returns<span class="colon">:</span></dt>
+<dd class="field-even"><p>Pointer to the created network. </p>
+</dd>
+</dl>
+</dd></dl>
+
+<dl class="cpp function">
+<dt class="sig sig-object cpp" id="_CPPv418print_network_rowsP10NetworkRow7int64_t">
+<span id="_CPPv318print_network_rowsP10NetworkRow7int64_t"></span><span id="_CPPv218print_network_rowsP10NetworkRow7int64_t"></span><span id="print_network_rows__NetworkRowP.int64_t"></span><span class="target" id="network_8h_1a5e730a4b6926b89f1ef2414562f10506"></span><span class="kt"><span class="pre">void</span></span><span class="w"> </span><span class="sig-name descname"><span class="n"><span class="pre">print_network_rows</span></span></span><span class="sig-paren">(</span><a class="reference internal" href="#_CPPv410NetworkRow" title="NetworkRow"><span class="n"><span class="pre">NetworkRow</span></span></a><span class="w"> </span><span class="p"><span class="pre">*</span></span><span class="n sig-param"><span class="pre">network_rows</span></span>, <span class="n"><span class="pre">int64_t</span></span><span class="w"> </span><span class="n sig-param"><span class="pre">network_size</span></span><span class="sig-paren">)</span><a class="headerlink" href="#_CPPv418print_network_rowsP10NetworkRow7int64_t" title="Link to this definition"></a><br /></dt>
+<dd><p>Prints the network rows. </p>
+<p>This function prints the given network rows along with their details.</p>
+<dl class="field-list simple">
+<dt class="field-odd">Parameters<span class="colon">:</span></dt>
+<dd class="field-odd"><ul class="simple">
+<li><p><strong>network_rows</strong> – Pointer to the network rows array. </p></li>
+<li><p><strong>network_size</strong> – The size of the network. </p></li>
+</ul>
+</dd>
+</dl>
+</dd></dl>
+
+</div>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="solution_8h"></span><em><span class="pre">file</span></em> <span class="sig-name descname"><span class="pre">solution.h</span></span></dt>
+<dd><div class="docutils container">
+<em>#include &lt;string&gt;</em></div>
+</dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="dir_e6df591b0639d4c4807ef64d058833e2"></span><em><span class="pre">dir</span></em> <span class="sig-name descname"><span class="pre">src/algorithms</span></span></dt>
+<dd></dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="dir_565d3c8631b834dd9a2b5c84c50aa307"></span><em><span class="pre">dir</span></em> <span class="sig-name descname"><span class="pre">src/algorithms/csa</span></span></dt>
+<dd></dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="dir_bdeba5f06b852fec80257c0bf4c3c36e"></span><em><span class="pre">dir</span></em> <span class="sig-name descname"><span class="pre">src/models</span></span></dt>
+<dd></dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="dir_49a118a804300d4ae0abed19b41e5079"></span><em><span class="pre">dir</span></em> <span class="sig-name descname"><span class="pre">src/algorithms/raptor</span></span></dt>
+<dd></dd></dl>
+
+<dl>
+<dt class="sig sig-object cpp">
+<span class="target" id="dir_68267d1309a1af8e8297ef4c3efbcdba"></span><em><span class="pre">dir</span></em> <span class="sig-name descname"><span class="pre">src</span></span></dt>
+<dd></dd></dl>
+
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="pgtfs_concepts.html" class="btn btn-neutral float-left" title="Concepts" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Adrian C. Prelipcean.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

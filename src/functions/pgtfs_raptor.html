@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>pgtfs_raptor &mdash; PGTFS  documentation</title>
+      <link rel="stylesheet" type="text/css" href="../../_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="../../_static/css/theme.css?v=19f00094" />
+
+  
+  <!--[if lt IE 9]>
+    <script src="../../_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="../../_static/jquery.js?v=5d32c60e"></script>
+        <script src="../../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="../../_static/documentation_options.js?v=5929fcd5"></script>
+        <script src="../../_static/doctools.js?v=9a2dae69"></script>
+        <script src="../../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../../index.html" class="icon icon-home">
+            PGTFS
+          </a>
+              <div class="version">
+                0.0.4
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">PGTFS</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../installation.html">Installation</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../functions.html">Functions</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../pgtfs_concepts.html">Concepts</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Developer Notes</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../doxygen.html">Developer documentation (C/C++)</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../../index.html">PGTFS</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../../index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active"><code class="docutils literal notranslate"><span class="pre">pgtfs_raptor</span></code></li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../../_sources/src/functions/pgtfs_raptor.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="pgtfs-raptor">
+<h1><code class="docutils literal notranslate"><span class="pre">pgtfs_raptor</span></code><a class="headerlink" href="#pgtfs-raptor" title="Link to this heading"></a></h1>
+<p><code class="docutils literal notranslate"><span class="pre">pgtfs_raptor</span></code> — Perform the Real-Time Algorithm for Public Transit Routing (RAPTOR) algorithm to identify the shortest arrival time between an origin and a destination, given a departure time and a GTFS network.</p>
+<p class="rubric">Availability</p>
+<ul class="simple">
+<li><p>Version 0.0.4</p>
+<ul>
+<li><p><strong>Official</strong> function was introduced</p></li>
+</ul>
+</li>
+</ul>
+<section id="description">
+<h2>Description<a class="headerlink" href="#description" title="Link to this heading"></a></h2>
+<p>The RAPTOR algorithm efficiently computes the optimal routes from a given origin to a destination by exploring a sequence of transit stops and connections.</p>
+<p>Beginning at the origin, RAPTOR iteratively scans through the available transit stops and connections to identify and expand potential routes. It evaluates each connection and updates the shortest path to the destination based on real-time data, allowing for dynamic adjustments. The algorithm continues this process, considering multiple rounds of exploration to ensure the most accurate and efficient route is found.</p>
+<p>The exploration is performed iteratively for a predefined number of rounds or until all feasible routes are evaluated, providing the best possible connections while considering factors such as travel time and transfer points.</p>
+</section>
+<section id="signature">
+<span id="index-0"></span><h2>Signature<a class="headerlink" href="#signature" title="Link to this heading"></a></h2>
+<div class="highlight-sql notranslate"><div class="highlight"><pre><span></span><span class="n">pgtfs_raptor</span><span class="p">(</span>
+<span class="w"> </span><span class="n">origin</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w"> </span><span class="n">destination</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w"> </span><span class="n">departure_time</span><span class="w"> </span><span class="n">DOUBLE</span><span class="w"> </span><span class="k">PRECISION</span><span class="p">,</span>
+<span class="w"> </span><span class="n">network</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w"> </span><span class="n">max_rounds</span><span class="w"> </span><span class="nb">INTEGER</span>
+<span class="w"> </span><span class="p">)</span>
+
+<span class="k">RETURNS</span><span class="w"> </span><span class="k">TABLE</span><span class="w"> </span><span class="p">(</span>
+<span class="w"> </span><span class="n">stop_id</span><span class="w"> </span><span class="nb">TEXT</span><span class="p">,</span>
+<span class="w"> </span><span class="n">stop_sequence</span><span class="w"> </span><span class="nb">INT</span><span class="p">,</span>
+<span class="w"> </span><span class="n">arrival_time</span><span class="w"> </span><span class="n">DOUBLE</span><span class="w"> </span><span class="k">PRECISION</span><span class="p">,</span>
+<span class="w"> </span><span class="n">trip_id</span><span class="w"> </span><span class="nb">TEXT</span>
+<span class="w"> </span><span class="p">)</span>
+</pre></div>
+</div>
+</section>
+<section id="input-columns">
+<h2>Input columns<a class="headerlink" href="#input-columns" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>origin</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEXT</span></code></p></td>
+<td><p>Id of the origin</p></td>
+</tr>
+<tr class="row-odd"><td><p>destination</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEXT</span></code></p></td>
+<td><p>Id of the destination</p></td>
+</tr>
+<tr class="row-even"><td><p>departure_time</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOUBLE</span> <span class="pre">PRECISION</span></code></p></td>
+<td><p>Epoch for departure time</p></td>
+</tr>
+<tr class="row-odd"><td><p>network</p></td>
+<td><p><a class="reference internal" href="#network-sql">Network SQL</a></p></td>
+<td><p>SQL query to select the GTFS network (see below for definition)</p></td>
+</tr>
+<tr class="row-even"><td><p>max_rounds</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">int</span></code></p></td>
+<td><p>The number of rounds RAPTOR is limited to (defaults to 5)</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="result-columns">
+<h2>Result columns<a class="headerlink" href="#result-columns" title="Link to this heading"></a></h2>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>stop_id</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEXT</span></code></p></td>
+<td><p>Id of the stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>stop_sequence</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEXT</span></code></p></td>
+<td><p>Position of the stop within the route</p></td>
+</tr>
+<tr class="row-even"><td><p>arrival_time</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOUBLE</span> <span class="pre">PRECISION</span></code></p></td>
+<td><p>Epoch for arrival time</p></td>
+</tr>
+<tr class="row-odd"><td><p>trip_id</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEXT</span></code></p></td>
+<td><p>Id of the trip for the stop sequence</p></td>
+</tr>
+</tbody>
+</table>
+<section id="network-sql">
+<h3>Network SQL<a class="headerlink" href="#network-sql" title="Link to this heading"></a></h3>
+<p>The network query should return the following data</p>
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>Name</p></th>
+<th class="head"><p>Type</p></th>
+<th class="head"><p>Description</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>trip_id</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEXT</span></code></p></td>
+<td><p>Id of the trip</p></td>
+</tr>
+<tr class="row-odd"><td><p>stop_id</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">TEXT</span></code></p></td>
+<td><p>Id of the stop</p></td>
+</tr>
+<tr class="row-even"><td><p>arrival_time</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOUBLE</span> <span class="pre">PRECISION</span></code></p></td>
+<td><p>Arrival time at the stop</p></td>
+</tr>
+<tr class="row-odd"><td><p>departure_time</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">DOUBLE</span> <span class="pre">PRECISION</span></code></p></td>
+<td><p>Departure time from the stop</p></td>
+</tr>
+<tr class="row-even"><td><p>stop_sequence</p></td>
+<td><p><code class="docutils literal notranslate"><span class="pre">INT</span></code></p></td>
+<td><p>Stop sequence within trip</p></td>
+</tr>
+</tbody>
+</table>
+</section>
+<section id="example-query">
+<h3>Example query<a class="headerlink" href="#example-query" title="Link to this heading"></a></h3>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>select stop_id, stop_sequence, to_timestamp(arrival_time), trip_id from pgtfs_raptor(
+    &#39;1&#39;, -- origin
+    &#39;6&#39;, -- destination
+    extract (epoch from &#39;2024-01-01 11:55:00+00&#39;::timestamptz)::double precision, -- expected departure time
+    $bd$
+    select
+        trip_id,
+        stop_id,
+        extract (epoch from arrival_time)::double precision,
+        extract (epoch from departure_time)::double precision,
+        stop_sequence::int
+        from (
+            values
+            (&#39;trip-1&#39;,&#39;1&#39;,NULL::timestamptz, &#39;2024-01-01 12:00:00+00&#39;::timestamptz,1),
+            (&#39;trip-1&#39;,&#39;2&#39;,&#39;2024-01-01 12:10:00+00&#39;,&#39;2024-01-01 12:15:00+00&#39;,2),
+            (&#39;trip-1&#39;,&#39;3&#39;,&#39;2024-01-01 12:20:00+00&#39;,&#39;2024-01-01 12:25:00+00&#39;,3),
+            (&#39;trip-1&#39;,&#39;4&#39;,&#39;2024-01-01 12:30:00+00&#39;,NULL,4),
+            (&#39;trip-2&#39;,&#39;3&#39;,NULL, &#39;2024-01-01 12:45:00+00&#39;,1),
+            (&#39;trip-2&#39;,&#39;5&#39;,&#39;2024-01-01 12:50:00+00&#39;,&#39;2024-01-01 12:55:00+00&#39;,2),
+            (&#39;trip-2&#39;,&#39;6&#39;,&#39;2024-01-01 13:00:00+00&#39;,NULL,3)
+        )
+        as data (trip_id, stop_id, arrival_time, departure_time, stop_sequence)
+    $bd$
+);
+</pre></div>
+</div>
+<p>Which produces a result similar to</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stop_id</span> <span class="o">|</span> <span class="n">stop_sequence</span> <span class="o">|</span>      <span class="n">to_timestamp</span>      <span class="o">|</span> <span class="n">trip_id</span>
+<span class="o">--------+---------------+------------------------+---------</span>
+<span class="mi">1</span>       <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">11</span><span class="p">:</span><span class="mi">55</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">00</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">2</span>       <span class="o">|</span>             <span class="mi">1</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">12</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">00</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">3</span>       <span class="o">|</span>             <span class="mi">2</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">12</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">00</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">5</span>       <span class="o">|</span>             <span class="mi">3</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">12</span><span class="p">:</span><span class="mi">50</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">00</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">2</span>
+<span class="mi">6</span>       <span class="o">|</span>             <span class="mi">4</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">00</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">00</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">2</span>
+</pre></div>
+</div>
+</section>
+<section id="minimizing-transfers-on-route">
+<h3>Minimizing transfers on route<a class="headerlink" href="#minimizing-transfers-on-route" title="Link to this heading"></a></h3>
+<p>This is done by default by the RAPTOR algorithm and does not require special consideration.</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span>select stop_id, stop_sequence, to_timestamp(arrival_time), trip_id from pgtfs_raptor(
+    &#39;1&#39;, -- origin
+    &#39;4&#39;, -- destination
+    extract (epoch from &#39;2024-01-01 11:55:00+00&#39;::timestamptz)::double precision, -- expected departure time
+    $bd$
+    select
+        trip_id,
+        stop_id,
+        extract (epoch from arrival_time)::double precision,
+        extract (epoch from departure_time)::double precision,
+        stop_sequence::int
+        from (
+            values
+            (&#39;trip-1&#39;,&#39;1&#39;,NULL::timestamptz, &#39;2024-01-01 12:00:00+00&#39;::timestamptz,1),
+            (&#39;trip-1&#39;,&#39;2&#39;,&#39;2024-01-01 12:10:00+00&#39;,&#39;2024-01-01 12:15:00+00&#39;,2),
+            (&#39;trip-1&#39;,&#39;3&#39;,&#39;2024-01-01 12:20:00+00&#39;,&#39;2024-01-01 12:25:00+00&#39;,3),
+            (&#39;trip-1&#39;,&#39;4&#39;,&#39;2024-01-01 12:30:00+00&#39;,NULL,4),
+            (&#39;trip-2&#39;,&#39;1&#39;,NULL, &#39;2024-01-01 12:00:00+00&#39;,1),
+            (&#39;trip-2&#39;,&#39;2&#39;,&#39;2024-01-01 12:10:00+00&#39;,&#39;2024-01-01 12:15:00+00&#39;,2),
+            (&#39;trip-2&#39;,&#39;4&#39;,&#39;2024-01-01 12:30:00+00&#39;,NULL,3)
+        )
+        as data (trip_id, stop_id, arrival_time, departure_time, stop_sequence)
+    $bd$
+);
+</pre></div>
+</div>
+<p>Produces the following result</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">stop_id</span> <span class="o">|</span> <span class="n">stop_sequence</span> <span class="o">|</span>      <span class="n">to_timestamp</span>      <span class="o">|</span> <span class="n">trip_id</span>
+<span class="o">--------+---------------+------------------------+---------</span>
+<span class="mi">1</span>       <span class="o">|</span>             <span class="mi">0</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">12</span><span class="p">:</span><span class="mi">55</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">01</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">2</span>       <span class="o">|</span>             <span class="mi">1</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">10</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">01</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">3</span>       <span class="o">|</span>             <span class="mi">2</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">20</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">01</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">1</span>
+<span class="mi">4</span>       <span class="o">|</span>             <span class="mi">3</span> <span class="o">|</span> <span class="mi">2024</span><span class="o">-</span><span class="mi">01</span><span class="o">-</span><span class="mi">01</span> <span class="mi">13</span><span class="p">:</span><span class="mi">30</span><span class="p">:</span><span class="mi">00</span><span class="o">+</span><span class="mi">01</span> <span class="o">|</span> <span class="n">trip</span><span class="o">-</span><span class="mi">1</span>
+</pre></div>
+</div>
+</section>
+<section id="see-also">
+<h3>See also<a class="headerlink" href="#see-also" title="Link to this heading"></a></h3>
+<ul class="simple">
+<li><p><a class="reference external" href="https://www.microsoft.com/en-us/research/wp-content/uploads/2012/01/raptor_alenex.pdf">Original RAPTOR paper</a></p></li>
+</ul>
+</section>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, Adrian C. Prelipcean.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
