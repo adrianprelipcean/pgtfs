@@ -8,6 +8,7 @@
 #include <tuple>
 #include <algorithm>
 #include <cstring>
+#include <limits>
 
 const double INF = std::numeric_limits<double>::infinity();
 
