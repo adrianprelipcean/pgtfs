@@ -22,7 +22,7 @@ extern "C"
 extern "C"
 {
     PG_MODULE_MAGIC;
-    static const char *EXTENSION_VERSION = "0.0.3";
+    static const char *EXTENSION_VERSION = "0.0.4";
 
     PG_FUNCTION_INFO_V1(pgtfs_csa);
     /**
@@ -86,9 +86,6 @@ extern "C"
                 solution = perform_CSA(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
 
             SPI_pfree(network);
-            pfree(destination);
-            pfree(network_query_text);
-            pfree(origin);
 
             if (solution.empty())
             {
@@ -183,6 +180,7 @@ extern "C"
             text *destination = PG_GETARG_TEXT_PP(1);
             float8 departure_time = PG_GETARG_FLOAT8(2);
             text *network_query_text = PG_GETARG_TEXT_PP(3);
+            int max_rounds = PG_GETARG_INT32(4);  
 
             if (departure_time < 0)
                 ereport(ERROR,
@@ -200,12 +198,9 @@ extern "C"
                 PG_RETURN_NULL();
             }
 
-            std::vector<SolutionRAPTOR> solution = perform_RAPTOR(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size);
+            std::vector<SolutionRAPTOR> solution = perform_RAPTOR(text_to_cstring(origin), text_to_cstring(destination), departure_time, network, network_size, max_rounds);
 
             SPI_pfree(network);
-            pfree(destination);
-            pfree(network_query_text);
-            pfree(origin);
 
             if (solution.empty())
             {
@@ -236,7 +231,7 @@ extern "C"
 
             values[0] = CStringGetTextDatum(stop.stop_id.c_str());
             values[1] = Int32GetDatum(stop.stop_sequence);
-            values[2] = Float8GetDatum((float)stop.arrival_time);
+            values[2] = Float8GetDatum(stop.arrival_time);
             values[3] = CStringGetTextDatum(stop.trip_id.c_str());
 
             bool nulls[4];
