@@ -12,6 +12,15 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to
 [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.0.4](https://github.com/adrianprelipcean/pgtfs/releases/tag/v0.0.4)
+### Added
+- Added Round Based Public Transit Routing (RAPTOR) implementation
+
+### Changed
+- Centralized solutions used by different algorithms into on `SolutionAlg` available in `src/models/solution.h`
+- Moved algorithms to one folder `src/algorithms`
+- Renamed `pg_tests` to `pg_csa` to allow for multiple algorithms to be tested
+
 ## [0.0.3](https://github.com/adrianprelipcean/pgtfs/releases/tag/v0.0.3)
 ### Added
 - Added version of Connection Scan Algorithms that prioritize searches on the same route (`perform_CSA_Minimize_Transfers`) invoked by setting the `minimize_transfers` boolean flag to `true`

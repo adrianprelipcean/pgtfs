@@ -19,4 +19,10 @@ Functions
    :start-after: index from here
    :end-before: index to here
 
+:doc:`functions/pgtfs_raptor`
+
+.. include:: functions/pgtfs_raptor.rst
+   :start-after: index from here
+   :end-before: index to here
+
 .. to-here

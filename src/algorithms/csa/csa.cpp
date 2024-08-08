@@ -10,12 +10,12 @@
 #include <algorithm>
 #include <cstring>
 
-std::vector<SolutionCSA> perform_CSA(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size)
+std::vector<SolutionAlg> perform_CSA(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size)
 {
     double departure_epoch = departure_time;
 
     int num_rows = network_size;
-    std::vector<SolutionCSA> stops;
+    std::vector<SolutionAlg> stops;
 
     std::priority_queue<std::tuple<double, std::string, std::vector<std::tuple<std::string, std::string, double>>>,
                         std::vector<std::tuple<double, std::string, std::vector<std::tuple<std::string, std::string, double>>>>,
@@ -40,7 +40,7 @@ std::vector<SolutionCSA> perform_CSA(const char *origin, const char *destination
             int stop_sequence = 0;
             for (const auto &step : route)
             {
-                SolutionCSA stop;
+                SolutionAlg stop;
                 stop.stop_id = std::get<0>(step);
                 stop.stop_sequence = stop_sequence;
                 stop.arrival_time = std::get<2>(step);
@@ -74,12 +74,12 @@ std::vector<SolutionCSA> perform_CSA(const char *origin, const char *destination
     return {};
 }
 
-std::vector<SolutionCSA> perform_CSA_Minimize_Transfers(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size)
+std::vector<SolutionAlg> perform_CSA_Minimize_Transfers(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size)
 {
     double departure_epoch = departure_time;
 
     int num_rows = network_size;
-    std::vector<SolutionCSA> stops;
+    std::vector<SolutionAlg> stops;
 
     std::priority_queue<std::tuple<double, std::string, std::vector<std::tuple<std::string, std::string, double>>>,
                         std::vector<std::tuple<double, std::string, std::vector<std::tuple<std::string, std::string, double>>>>,
@@ -109,7 +109,7 @@ std::vector<SolutionCSA> perform_CSA_Minimize_Transfers(const char *origin, cons
             for (auto it = route.rbegin(); it != route.rend(); ++it)
             {
                 const auto &step = *it;
-                SolutionCSA stop;
+                SolutionAlg stop;
                 stop.stop_id = std::get<0>(step);
                 stop.arrival_time = std::get<2>(step);
                 stop_sequence++;
