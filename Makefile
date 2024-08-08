@@ -5,7 +5,7 @@
 EXTENSION = pgtfs
 DATA = sql/pgtfs--*.sql
 MODULE_big = pgtfs
-OBJS = pgtfs.o src/models/network.o src/csa/csa.o src/raptor/raptor.o
+OBJS = pgtfs.o src/models/network.o src/algorithms/csa/csa.o src/algorithms/raptor/raptor.o
 REGRESS= pgtfs_csa pgtfs_raptor network_edge_cases_test
 REGRESS_OPTS= --inputdir=tests --outputdir=tests --user=postgres
 PG_CONFIG = pg_config 

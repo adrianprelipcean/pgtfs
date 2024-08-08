@@ -16,8 +16,8 @@ extern "C"
 #include "src/models/network.h"
 }
 
-#include "src/csa/csa.h"
-#include "src/raptor/raptor.h"
+#include "src/algorithms/csa/csa.h"
+#include "src/algorithms/raptor/raptor.h"
 
 extern "C"
 {
