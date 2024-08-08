@@ -9,66 +9,135 @@
 #include <algorithm>
 #include <cstring>
 
-std::vector<SolutionRAPTOR> perform_RAPTOR(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size)
+const double INF = std::numeric_limits<double>::infinity();
+
+std::vector<SolutionRAPTOR> perform_RAPTOR(const char *origin, const char *destination, float8 departure_time, NetworkRow *network, int64_t network_size, int max_rounds)
 {
-    time_t departure_epoch = (time_t)departure_time;
-
-    int num_rows = network_size;
-    std::vector<SolutionRAPTOR> stops;
-
     std::unordered_map<std::string, std::vector<NetworkRow>> departures;
-    std::priority_queue<std::tuple<time_t, std::string, std::string, int>, std::vector<std::tuple<time_t, std::string, std::string, int>>, std::greater<std::tuple<time_t, std::string, std::string, int>>> pq;
-    std::unordered_map<std::string, std::tuple<time_t, std::string, std::string>> previous_stop;
+    preprocess_timetable(network, network_size, departures);
 
-    preprocess_timetable(network, num_rows, departures);
+    std::vector<RoundData> rounds(max_rounds);
 
-    previous_stop[origin] = {departure_epoch, "", ""};
-    pq.push({departure_epoch, origin, "", 0});
+    rounds[0].arrival_times[origin] = departure_time;
+    rounds[0].stops[origin] = {departure_time, "", "", 0};
 
-    while (!pq.empty())
+    for (int round = 1; round < max_rounds; ++round)
     {
-        auto [current_time, current_node, prev_trip_id, current_stop_sequence] = pq.top();
-        pq.pop();
+        RoundData &current_round = rounds[round];
+        RoundData &previous_round = rounds[round - 1];
 
-        if (current_node == destination)
+        current_round.stops = previous_round.stops;
+        current_round.arrival_times = previous_round.arrival_times;
+
+        // For each neighbor of the nodes analyzed in the previous round 
+        // evaluate the effect of the next transfers
+        for (const auto &entry : previous_round.stops)
         {
-            int num_stops = 0;
-            std::string node = destination;
+            const std::string &current_node = entry.first;
+            const auto &current_info = entry.second;
+            double current_time = std::get<0>(current_info);
+            int current_transfers = std::get<3>(current_info);
+            std::string current_trip_id = std::get<2>(current_info);
 
-            while (node != origin)
+            if (departures.find(current_node) != departures.end())
             {
-                ++num_stops;
-                auto [arrival_time, prev_node, trip_id] = previous_stop[node];
-                node = prev_node;
-            }
+                for (const auto &departure : departures[current_node])
+                {
+                    if (departure.departure_time >= current_time)
+                    {
+                        double arrival_time = departure.departure_time + departure.travel_time;
+                        std::string to_stop_id = departure.to_stop_id;
+                        std::string trip_id = departure.trip_id;
 
-            std::vector<SolutionRAPTOR> route;
-            node = destination;
-            int stop_sequence = num_stops;
-            while (node != origin)
-            {
-                auto [arrival_time, prev_node, trip_id] = previous_stop[node];
-                route.push_back({node, stop_sequence--, arrival_time, trip_id});
-                node = prev_node;
+                        int new_transfers = (departure.trip_id == current_trip_id) ? current_transfers : current_transfers + 1;
+
+                        // Check for improvements in either arrival time, or number of transfers
+                        if (current_round.stops.find(to_stop_id) == current_round.stops.end() ||
+                            (arrival_time < std::get<0>(current_round.stops[to_stop_id]) ||
+                             (arrival_time == std::get<0>(current_round.stops[to_stop_id]) && new_transfers < std::get<3>(current_round.stops[to_stop_id]))))
+                        {
+                            current_round.stops[to_stop_id] = {arrival_time, current_node, trip_id, new_transfers};
+                            current_round.arrival_times[to_stop_id] = arrival_time;
+
+                            auto trip_departures = departures.find(to_stop_id);
+                            std::string prev_neighbor = to_stop_id;
+                            // Traverse the entire trip
+                            while (trip_departures != departures.end() && !trip_departures->second.empty() && trip_departures->second[0].trip_id == trip_id)
+                            {
+                                double stop_departure_time = trip_departures->second[0].departure_time;
+                                arrival_time = stop_departure_time + trip_departures->second[0].travel_time;
+                                std::string next_stop_id = trip_departures->second[0].to_stop_id;
+                                trip_departures->second.erase(trip_departures->second.begin());
+
+                                // Check for improvements in either arrival time, or number of transfers
+                                if (stop_departure_time > 0 && (current_round.stops.find(next_stop_id) == current_round.stops.end() ||
+                                                                (arrival_time < std::get<0>(current_round.stops[next_stop_id]) ||
+                                                                 (arrival_time == std::get<0>(current_round.stops[next_stop_id]) && new_transfers < std::get<3>(current_round.stops[next_stop_id])))))
+                                {
+                                    current_round.stops[next_stop_id] = {arrival_time, prev_neighbor, trip_id, new_transfers};
+                                    current_round.arrival_times[next_stop_id] = arrival_time;
+                                }
+
+                                trip_departures = departures.find(next_stop_id);
+                                prev_neighbor = next_stop_id;
+                            }
+                        }
+                    }
+                }
             }
-            route.push_back({origin, 0, departure_epoch, ""});
-            std::reverse(route.begin(), route.end());
-            return route;
         }
 
-        for (const auto &departure : departures[current_node])
+        // Check if the destination is reached in the current round
+        if (current_round.stops.find(destination) != current_round.stops.end())
         {
-            if (departure.departure_time < current_time)
-                continue;
+            break;
+        }
+    }
 
-            time_t arrival_time = (time_t)departure.departure_time + (time_t)departure.travel_time;
+    std::vector<SolutionRAPTOR> route;
+    double best_arrival_time = INF;
+    int best_round = -1;
+    std::unordered_map<std::string, std::tuple<double, std::string, std::string, int>> best_stops;
 
-            if (previous_stop.find(departure.to_stop_id) == previous_stop.end() || arrival_time < std::get<0>(previous_stop[departure.to_stop_id]))
+    // Find the best round with the optimal arrival time and fewest transfers
+    for (int round = 0; round < max_rounds; ++round)
+    {
+        if (rounds[round].stops.find(destination) != rounds[round].stops.end())
+        {
+            double arrival_time = std::get<0>(rounds[round].stops[destination]);
+            int transfers = std::get<3>(rounds[round].stops[destination]);
+            if (arrival_time < best_arrival_time ||
+                (arrival_time == best_arrival_time && transfers < std::get<3>(best_stops[destination])))
             {
-                previous_stop[departure.to_stop_id] = {arrival_time, current_node, departure.trip_id};
-                pq.push({arrival_time, departure.to_stop_id, departure.trip_id, current_stop_sequence});
+                best_arrival_time = arrival_time;
+                best_round = round;
+                best_stops = rounds[round].stops;
             }
         }
+    }
+
+    if (best_round != -1)
+    {
+        std::string node = destination;
+        std::string last_trip_id = "";
+        // Backtrack to build the sequence of stops from destination to origin
+        while (node != origin)
+        {
+            const auto &stop_info = best_stops[node];
+            double arrival_time = std::get<0>(stop_info);
+            std::string prev_node = std::get<1>(stop_info);
+            std::string trip_id = std::get<2>(stop_info);
+            route.push_back({node, 0, arrival_time, trip_id});
+            node = prev_node;
+            last_trip_id = trip_id;
+        }
+        route.push_back({origin, 0, departure_time, last_trip_id});
+        std::reverse(route.begin(), route.end());
+        for (size_t i = 0; i < route.size(); ++i)
+        {
+            route[i].stop_sequence = static_cast<int>(i);
+        }
+        return route;
     }
 
     return {};
@@ -80,14 +149,13 @@ void preprocess_timetable(NetworkRow *network, int64_t network_size, std::unorde
     {
         std::string from_stop_id = network[i].from_stop_id;
         std::string trip_id = network[i].trip_id;
-        time_t departure_time = (time_t)network[i].departure_time;
-        time_t arrival_time = departure_time + (time_t)network[i].travel_time;
 
         departures[from_stop_id].push_back(network[i]);
     }
 
-    for (auto &[from_stop_id, dep_list] : departures)
+    for (auto it = departures.begin(); it != departures.end(); ++it)
     {
+        std::vector<NetworkRow> &dep_list = it->second;
         std::sort(dep_list.begin(), dep_list.end(), [](const NetworkRow &a, const NetworkRow &b)
                   { return a.departure_time < b.departure_time; });
     }
