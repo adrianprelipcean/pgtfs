@@ -30,7 +30,8 @@ CREATE OR REPLACE FUNCTION pgtfs_raptor(
     origin TEXT,
     destination TEXT,
     departure_time DOUBLE PRECISION,
-    network TEXT
+    network TEXT,
+    max_rounds INT DEFAULT 5
 )
 RETURNS TABLE (
     stop_id TEXT,
